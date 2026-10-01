@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Voltzy — Mobile Megastore | Shop, Book Repairs & Score Deals</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    fontFamily: { display: ['"Bricolage Grotesque"','Fredoka','sans-serif'], body: ['"Plus Jakarta Sans"','Nunito','sans-serif'] },
+    colors: { ink:'#121212', grape:'#7C3AED', tang:'#FF5A1F', sunny:'#FFC700', bubble:'#FF2E9A', aqua:'#00D1FF', limepop:'#B6FF2E' },
+    boxShadow: { pop:'6px 6px 0 #121212', popsm:'4px 4px 0 #121212', poplg:'10px 10px 0 #121212' }
+  }}
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<style>
+  *{ -webkit-tap-highlight-color:transparent; }
+  body{ font-family:'Plus Jakarta Sans',sans-serif; background:#FFFDF3; color:#121212; overflow-x:hidden; }
+  .font-display{ font-family:'Bricolage Grotesque',sans-serif; }
+  .grad-text{ background:linear-gradient(92deg,#FF2E9A 0%,#FF5A1F 35%,#FFC700 60%,#7C3AED 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .grad-bg{ background:linear-gradient(135deg,#FF2E9A,#FF5A1F 40%,#FFC700 75%,#FFE500); }
+  .grad-bg2{ background:linear-gradient(135deg,#00D1FF,#7C3AED 55%,#FF2E9A); }
+  .grad-bg3{ background:linear-gradient(135deg,#B6FF2E,#00D1A1 50%,#00D1FF); }
+  .grad-bg4{ background:linear-gradient(135deg,#7C3AED,#00D1FF 60%,#B6FF2E); }
+  .btn-pop{ border:2.5px solid #121212; box-shadow:5px 5px 0 #121212; transition:.18s cubic-bezier(.34,1.56,.64,1); font-weight:800; }
+  .btn-pop:hover{ transform:translate(-2px,-2px); box-shadow:7px 7px 0 #121212; }
+  .btn-pop:active{ transform:translate(3px,3px); box-shadow:1px 1px 0 #121212; }
+  .card-pop{ border:2.5px solid #121212; box-shadow:6px 6px 0 #121212; transition:.25s cubic-bezier(.34,1.56,.64,1); }
+  .card-pop:hover{ transform:translate(-3px,-3px) rotate(-.4deg); box-shadow:10px 10px 0 #121212; }
+  .sticker{ border:2px solid #121212; box-shadow:3px 3px 0 #121212; }
+  .dotted{ background-image:radial-gradient(#121212 1.5px, transparent 1.5px); background-size:18px 18px; }
+  .dotted-light{ background-image:radial-gradient(rgba(255,255,255,.35) 1.8px, transparent 1.8px); background-size:20px 20px; }
+  .marquee-track{ display:flex; width:max-content; animation:marquee 22s linear infinite; }
+  @keyframes marquee{ to{ transform:translateX(-50%);} }
+  .marquee-rev{ animation:marqueeR 26s linear infinite; }
+  @keyframes marqueeR{ from{ transform:translateX(-50%);} to{ transform:translateX(0);} }
+  .blob{ position:absolute; filter:blur(60px); opacity:.65; border-radius:9999px; animation:floatBlob 9s ease-in-out infinite alternate; pointer-events:none; }
+  @keyframes floatBlob{ 0%{ transform:translate(0,0) scale(1);} 100%{ transform:translate(30px,-30px) scale(1.15);} }
+  @keyframes floaty{ 0%,100%{ transform:translateY(0) rotate(var(--r,0deg));} 50%{ transform:translateY(-16px) rotate(var(--r,0deg));} }
+  .floaty{ animation:floaty 4.5s ease-in-out infinite; }
+  @keyframes spinSlow{ to{ transform:rotate(360deg);} }
+  .spin-slow{ animation:spinSlow 14s linear infinite; }
+  @keyframes wiggle{ 0%,100%{ transform:rotate(-3deg);} 50%{ transform:rotate(3deg);} }
+  .wiggle{ animation:wiggle 2.2s ease-in-out infinite; }
+  .tick{ background:repeating-linear-gradient(-45deg,#121212 0 10px,#FFC700 10px 20px); height:14px; border-top:2.5px solid #121212; border-bottom:2.5px solid #121212; }
+  .no-scrollbar::-webkit-scrollbar{ display:none; } .no-scrollbar{ scrollbar-width:none; }
+  ::-webkit-scrollbar{ width:10px; height:10px; } ::-webkit-scrollbar-track{ background:#FFF3C4; } ::-webkit-scrollbar-thumb{ background:#121212; border-radius:99px; border:2px solid #FFF3C4; }
+  .phone-frame{ border:3px solid #121212; box-shadow:10px 10px 0 #121212; border-radius:2.8rem; overflow:hidden; background:#000; }
+  .chip-day.active, .slot.active, .svc.active, .catpill.active, .payM.active, .stor.active{ outline:3px solid #121212; transform:scale(1.03); }
+  .chip-day.active{ background:#121212 !important; color:#fff !important; }
+  .slot.active{ background:#B6FF2E !important; }
+  .svc.active{ background:#FFF !important; box-shadow:6px 6px 0 #121212; }
+  .catpill.active{ background:#121212 !important; color:#fff !important; }
+  .stor.active{ background:#121212 !important; color:#fff !important; }
+  .payM.active{ background:#FFC700 !important; }
+  input:focus, select:focus, textarea:focus{ outline:3px solid #7C3AED; outline-offset:1px; }
+  .toast-in{ animation:toastIn .35s cubic-bezier(.34,1.56,.64,1) forwards; }
+  @keyframes toastIn{ from{ transform:translateY(20px) scale(.9); opacity:0;} to{ transform:translateY(0) scale(1); opacity:1;} }
+  .modal-bg{ background:rgba(18,18,18,.65); backdrop-filter:blur(6px); }
+  .timeline-dot{ width:28px; height:28px; border:2.5px solid #121212; border-radius:99px; display:flex; align-items:center; justify-content:center; font-size:13px; background:#fff; flex-shrink:0; }
+  .timeline-dot.done{ background:#B6FF2E; } .timeline-dot.now{ background:#FFC700; animation:pulse 1.2s infinite; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(255,199,0,.7);} 50%{ box-shadow:0 0 0 8px rgba(255,199,0,0);} }
+  .zig{ clip-path:polygon(0 0,100% 3%,100% 97%,0 100%); }
+  .range{ -webkit-appearance:none; height:10px; border:2px solid #121212; border-radius:99px; background:linear-gradient(90deg,#FF2E9A,#FFC700); }
+  .range::-webkit-slider-thumb{ -webkit-appearance:none; width:26px; height:26px; background:#fff; border:3px solid #121212; border-radius:99px; box-shadow:3px 3px 0 #121212; cursor:pointer; }
+  .star{ color:#FFC700; -webkit-text-stroke:1px #121212; }
+  .ticket-edge{ --r:12px; mask:radial-gradient(var(--r) at left center, transparent 98%, #000) left/51% 100% no-repeat, radial-gradient(var(--r) at right center, transparent 98%, #000) right/51% 100% no-repeat; }
+  @media(max-width:640px){ .card-pop:hover{ transform:none; } }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- TOP MARQUEE -->
+<div class="bg-ink text-white overflow-hidden py-2 border-b-[3px] border-ink relative z-[60]">
+  <div class="marquee-track gap-0 font-display font-800 text-[13px] tracking-wide font-bold">
+    <div class="flex items-center gap-8 pr-8 whitespace-nowrap">
+      <span>⚡ FLASH SALE UP TO 40% OFF</span><span class="text-sunny">●</span><span>USE CODE: VOLT20 FOR EXTRA 20%</span><span class="text-bubble">●</span><span>FREE SCREEN GUARD ON EVERY PHONE</span><span class="text-aqua">●</span><span>0% EMI • NO COST • INSTANT APPROVAL</span><span class="text-limepop">●</span><span>REPAIRS IN 45 MINS OR FREE COFFEE</span><span class="text-sunny">●</span>
+    </div>
+    <div class="flex items-center gap-8 pr-8 whitespace-nowrap" aria-hidden="true">
+      <span>⚡ FLASH SALE UP TO 40% OFF</span><span class="text-sunny">●</span><span>USE CODE: VOLT20 FOR EXTRA 20%</span><span class="text-bubble">●</span><span>FREE SCREEN GUARD ON EVERY PHONE</span><span class="text-aqua">●</span><span>0% EMI • NO COST • INSTANT APPROVAL</span><span class="text-limepop">●</span><span>REPAIRS IN 45 MINS OR FREE COFFEE</span><span class="text-sunny">●</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<header id="nav" class="sticky top-0 z-50 bg-[#FFFDF3]/90 backdrop-blur-xl border-b-[3px] border-ink">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-[72px] gap-3">
+    <a href="#home" class="flex items-center gap-2.5">
+      <div class="w-11 h-11 rounded-2xl grad-bg border-[2.5px] border-ink shadow-popsm flex items-center justify-center rotate-[-6deg]">
+        <i class="fa-solid fa-bolt text-white text-xl drop-shadow"></i>
+      </div>
+      <div class="leading-none">
+        <div class="font-display font-extrabold text-2xl tracking-tight">VOLTZY<span class="text-bubble">.</span></div>
+        <div class="text-[10px] font-extrabold tracking-[.25em] uppercase opacity-70">Mobile Megastore</div>
+      </div>
+    </a>
+    <nav class="hidden lg:flex items-center gap-1 font-bold text-[14px]">
+      <a href="#shop" class="px-4 py-2 rounded-full hover:bg-sunny border-2 border-transparent hover:border-ink transition">Shop</a>
+      <a href="#deals" class="px-4 py-2 rounded-full hover:bg-bubble hover:text-white border-2 border-transparent hover:border-ink transition">Deals</a>
+      <a href="#booking" class="px-4 py-2 rounded-full hover:bg-aqua border-2 border-transparent hover:border-ink transition">Book Repair</a>
+      <a href="#tradein" class="px-4 py-2 rounded-full hover:bg-limepop border-2 border-transparent hover:border-ink transition">Trade-In</a>
+      <a href="#reviews" class="px-4 py-2 rounded-full hover:bg-grape hover:text-white border-2 border-transparent hover:border-ink transition">Reviews</a>
+      <a href="#visit" class="px-4 py-2 rounded-full hover:bg-ink hover:text-white border-2 border-transparent transition">Visit Us</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <button onclick="toggleSearch()" class="hidden sm:flex w-10 h-10 rounded-full bg-white border-[2.5px] border-ink items-center justify-center hover:bg-sunny transition" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button onclick="toggleWishlistDrawer()" class="relative w-10 h-10 rounded-full bg-white border-[2.5px] border-ink flex items-center justify-center hover:bg-bubble hover:text-white transition" title="Wishlist">
+        <i class="fa-solid fa-heart"></i>
+        <span id="wishCount" class="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] px-1 rounded-full bg-bubble text-white text-[11px] font-extrabold border-2 border-ink hidden items-center justify-center">0</span>
+      </button>
+      <button onclick="openCart()" class="relative flex items-center gap-2 h-11 pl-3 pr-4 rounded-full bg-ink text-white border-[2.5px] border-ink shadow-popsm hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition font-extrabold text-sm">
+        <i class="fa-solid fa-bag-shopping text-sunny"></i><span class="hidden sm:inline">Cart</span>
+        <span id="cartCount" class="min-w-[24px] h-6 px-1.5 rounded-full grad-bg text-white text-xs font-extrabold border-2 border-white flex items-center justify-center">0</span>
+      </button>
+      <a href="#booking" class="hidden md:inline-flex btn-pop grad-bg text-white rounded-full px-5 h-11 items-center gap-2 text-sm"><i class="fa-solid fa-screwdriver-wrench"></i> Book Repair</a>
+      <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="lg:hidden w-11 h-11 rounded-xl bg-sunny border-[2.5px] border-ink flex items-center justify-center"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+  <div id="searchBar" class="hidden border-t-[2.5px] border-ink bg-sunny px-4 py-3">
+    <div class="max-w-3xl mx-auto flex gap-2">
+      <div class="flex-1 flex items-center gap-2 bg-white border-[2.5px] border-ink rounded-full px-4 h-11">
+        <i class="fa-solid fa-magnifying-glass opacity-60"></i>
+        <input id="globalSearch" oninput="onSearch(this.value)" placeholder="Search phones, buds, watches, chargers..." class="w-full bg-transparent outline-none font-semibold text-sm placeholder:text-black/40"/>
+      </div>
+      <button onclick="toggleSearch()" class="w-11 h-11 rounded-full bg-ink text-white border-[2.5px] border-ink flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden border-t-[2.5px] border-ink bg-white px-4 py-4 grid gap-2 font-bold">
+    <a href="#shop" class="p-3 rounded-xl border-2 border-ink bg-[#FFF3C4]">🛍️ Shop Phones</a>
+    <a href="#deals" class="p-3 rounded-xl border-2 border-ink bg-[#FFD6E8]">🔥 Today's Deals</a>
+    <a href="#booking" class="p-3 rounded-xl border-2 border-ink bg-[#CFF4FF]">🔧 Book Repair</a>
+    <a href="#tradein" class="p-3 rounded-xl border-2 border-ink bg-[#E6FFB3]">♻️ Trade-In Estimator</a>
+    <a href="#visit" class="p-3 rounded-xl border-2 border-ink bg-[#E9DDFF]">📍 Visit Store</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-[#FFF3C4] via-[#FFE0EF] to-[#D8F6FF]"></div>
+  <div class="blob w-[420px] h-[420px] bg-bubble left-[-100px] top-[-80px]"></div>
+  <div class="blob w-[380px] h-[380px] bg-aqua right-[-80px] top-[20%]"></div>
+  <div class="blob w-[300px] h-[300px] bg-sunny left-[30%] bottom-[-100px]" style="animation-delay:-3s"></div>
+  <div class="absolute inset-0 dotted opacity-[.12]"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-14 lg:pt-16 lg:pb-20 grid lg:grid-cols-[1.05fr_.95fr] gap-10 items-center">
+    <div>
+      <div class="flex flex-wrap items-center gap-2 mb-5">
+        <span class="sticker bg-ink text-white text-[11px] font-extrabold px-3 py-1.5 rounded-full rotate-[-3deg] tracking-widest">★ RATED 4.9 • 12K+ HAPPY CUSTOMERS</span>
+        <span class="sticker bg-limepop text-[11px] font-extrabold px-3 py-1.5 rounded-full rotate-[2deg] tracking-widest">NEW: FOLDABLES IN STORE</span>
+      </div>
+      <h1 class="font-display font-extrabold leading-[.95] tracking-tight text-[46px] sm:text-[68px] lg:text-[78px]">
+        YOUR NEXT<br>
+        <span class="grad-text">PHONE OBSESSION</span><br>
+        STARTS HERE.
+      </h1>
+      <p class="mt-5 text-[16px] sm:text-lg font-medium text-black/70 max-w-xl">Flagships, budget beasts, accessories & <b class="text-black">45-minute repairs</b>. Shop online, book instantly, pick up in store — with confetti-worthy deals every single day.</p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a href="#shop" class="btn-pop grad-bg text-white rounded-2xl px-7 h-[54px] inline-flex items-center gap-2 text-[16px]"><i class="fa-solid fa-bag-shopping"></i> Shop Phones <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="#booking" class="btn-pop bg-white rounded-2xl px-7 h-[54px] inline-flex items-center gap-2 text-[16px]"><i class="fa-solid fa-calendar-check text-bubble"></i> Book Repair — Free Checkup</a>
+      </div>
+      <div class="mt-7 flex flex-wrap gap-2.5 text-[13px] font-bold">
+        <span class="sticker bg-white rounded-full px-3.5 py-2"><i class="fa-solid fa-truck-fast text-tang mr-1"></i> Same-day delivery</span>
+        <span class="sticker bg-white rounded-full px-3.5 py-2"><i class="fa-solid fa-shield-halved text-grape mr-1"></i> 1-yr warranty</span>
+        <span class="sticker bg-white rounded-full px-3.5 py-2"><i class="fa-solid fa-rotate-left text-aqua mr-1"></i> 7-day returns</span>
+        <span class="sticker bg-white rounded-full px-3.5 py-2"><i class="fa-solid fa-percent text-bubble mr-1"></i> 0% EMI</span>
+      </div>
+      <div class="mt-8 grid grid-cols-3 max-w-md gap-3">
+        <div class="card-pop bg-white rounded-2xl p-3 text-center"><div class="font-display font-extrabold text-2xl"><span class="counter" data-to="15000">0</span>+</div><div class="text-[11px] font-extrabold tracking-widest opacity-60">PHONES SOLD</div></div>
+        <div class="card-pop bg-ink text-white rounded-2xl p-3 text-center"><div class="font-display font-extrabold text-2xl"><span class="counter" data-to="45">0</span> min</div><div class="text-[11px] font-extrabold tracking-widest opacity-70">AVG REPAIR</div></div>
+        <div class="card-pop bg-sunny rounded-2xl p-3 text-center"><div class="font-display font-extrabold text-2xl">4.9★</div><div class="text-[11px] font-extrabold tracking-widest opacity-60">GOOGLE RATING</div></div>
+      </div>
+    </div>
+
+    <!-- HERO VISUAL -->
+    <div class="relative flex justify-center lg:justify-end">
+      <div class="absolute w-[420px] h-[420px] rounded-full border-[3px] border-ink/10 spin-slow hidden sm:block" style="border-style:dashed"></div>
+      <div class="relative">
+        <div class="phone-frame w-[260px] sm:w-[300px] floaty" style="--r:-6deg; transform:rotate(-6deg)">
+          <div class="bg-black text-white flex items-center justify-between px-5 pt-3 pb-1 text-[11px] font-bold"><span>9:41</span><span class="w-20 h-5 bg-black border border-white/20 rounded-full"></span><span><i class="fa-solid fa-signal"></i> <i class="fa-solid fa-wifi"></i></span></div>
+          <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&q=80&auto=format&fit=crop" class="w-full h-[380px] sm:h-[430px] object-cover" alt="Phone"/>
+          <div class="bg-gradient-to-r from-[#FF2E9A] via-[#FF5A1F] to-[#FFC700] p-4 flex items-center justify-between">
+            <div><div class="text-white font-display font-extrabold leading-none text-xl">Nova X5 Pro</div><div class="text-white/90 text-xs font-bold">256GB • 120Hz • 5G</div></div>
+            <div class="bg-white border-2 border-ink rounded-xl px-3 py-1.5 font-extrabold">$899</div>
+          </div>
+        </div>
+        <!-- floating cards -->
+        <div class="absolute -left-16 sm:-left-24 top-8 card-pop bg-white rounded-2xl p-3 w-[150px] floaty" style="--r:4deg; animation-delay:-1s">
+          <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=300&q=80&auto=format&fit=crop" class="w-full h-[86px] object-cover rounded-xl border-2 border-ink" alt="buds"/>
+          <div class="text-[12px] font-extrabold mt-1.5">AirPulse Buds</div><div class="text-[12px] font-bold text-bubble">$129 <s class="text-black/40">$179</s></div>
+          <button onclick="addToCart(7,1)" class="mt-1.5 w-full text-[11px] font-extrabold bg-limepop border-2 border-ink rounded-lg py-1.5">+ ADD</button>
+        </div>
+        <div class="absolute -right-4 sm:-right-10 top-1/3 card-pop bg-ink text-white rounded-2xl p-3 w-[160px] floaty" style="--r:-3deg; animation-delay:-2.2s">
+          <div class="text-[11px] font-extrabold tracking-widest text-limepop">⚡ FLASH DEAL</div>
+          <div class="font-display font-extrabold text-lg leading-tight">-30% Foldables</div>
+          <div id="heroMiniTimer" class="text-[12px] font-bold text-sunny">Ends in 05:23:11</div>
+          <a href="#deals" class="mt-2 block text-center text-[11px] font-extrabold bg-white text-black rounded-lg py-1.5 border-2 border-white">GRAB NOW →</a>
+        </div>
+        <div class="absolute -left-8 sm:-left-16 bottom-10 sticker bg-sunny rounded-2xl px-4 py-2.5 rotate-[-6deg] floaty" style="animation-delay:-.6s">
+          <div class="text-[11px] font-extrabold">⭐ 4.9 • “Fixed my screen</div><div class="text-[11px] font-extrabold">in 30 mins! Insane.”</div>
+        </div>
+        <div class="absolute -right-2 sm:-right-6 -bottom-4 card-pop bg-white rounded-2xl px-4 py-3 flex items-center gap-3 floaty" style="animation-delay:-3s">
+          <div class="w-10 h-10 rounded-full grad-bg3 border-2 border-ink flex items-center justify-center"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <div><div class="text-[12px] font-extrabold">Repair booked!</div><div class="text-[11px] font-bold opacity-60">Today • 4:30 PM • Token #A42</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- brand strip -->
+  <div class="relative bg-ink text-white border-y-[3px] border-ink py-3 overflow-hidden -rotate-[.6deg] scale-[1.02]">
+    <div class="marquee-track marquee-rev font-display font-extrabold text-lg tracking-wide">
+      <div class="flex gap-10 pr-10 whitespace-nowrap items-center"><span>APPLE</span><span class="text-sunny">✦</span><span>SAMSUNG</span><span class="text-bubble">✦</span><span>GOOGLE PIXEL</span><span class="text-aqua">✦</span><span>ONEPLUS</span><span class="text-limepop">✦</span><span>XIAOMI</span><span class="text-sunny">✦</span><span>NOTHING</span><span class="text-bubble">✦</span><span>MOTOROLA</span><span class="text-aqua">✦</span><span>VIVO • OPPO • REALME</span><span class="text-limepop">✦</span></div>
+      <div class="flex gap-10 pr-10 whitespace-nowrap items-center" aria-hidden="true"><span>APPLE</span><span class="text-sunny">✦</span><span>SAMSUNG</span><span class="text-bubble">✦</span><span>GOOGLE PIXEL</span><span class="text-aqua">✦</span><span>ONEPLUS</span><span class="text-limepop">✦</span><span>XIAOMI</span><span class="text-sunny">✦</span><span>NOTHING</span><span class="text-bubble">✦</span><span>MOTOROLA</span><span class="text-aqua">✦</span><span>VIVO • OPPO • REALME</span><span class="text-limepop">✦</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FLASH DEALS -->
+<section id="deals" class="relative bg-[#121212] text-white py-14 overflow-hidden">
+  <div class="absolute inset-0 dotted-light opacity-20"></div>
+  <div class="blob w-[400px] h-[400px] bg-grape left-[10%] top-[-100px] opacity-50"></div>
+  <div class="blob w-[350px] h-[350px] bg-tang right-[5%] bottom-[-80px] opacity-50"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+      <div>
+        <span class="inline-flex sticker bg-bubble text-white text-xs font-extrabold px-4 py-1.5 rounded-full rotate-[-2deg]"><i class="fa-solid fa-fire mr-1"></i> LIMITED TIME • TODAY ONLY</span>
+        <h2 class="font-display font-extrabold text-4xl sm:text-6xl mt-3">FLASH <span class="grad-text">SALE</span> IS LIVE</h2>
+        <p class="text-white/70 font-medium mt-2 max-w-lg">Extra stackable codes. Lowest prices of the season. When the bar empties, the deal dies.</p>
+      </div>
+      <div class="card-pop bg-white text-ink rounded-2xl p-4 flex items-center gap-4">
+        <div class="text-center"><div class="text-[10px] font-extrabold tracking-widest opacity-60">ENDS IN</div>
+          <div class="flex gap-2 mt-1">
+            <div class="bg-ink text-white rounded-xl w-[62px] py-2"><div id="cdH" class="font-display font-extrabold text-2xl leading-none">05</div><div class="text-[10px] font-bold opacity-70">HRS</div></div>
+            <div class="font-display font-extrabold text-2xl self-center">:</div>
+            <div class="bg-ink text-white rounded-xl w-[62px] py-2"><div id="cdM" class="font-display font-extrabold text-2xl leading-none">23</div><div class="text-[10px] font-bold opacity-70">MIN</div></div>
+            <div class="font-display font-extrabold text-2xl self-center">:</div>
+            <div class="bg-bubble text-white rounded-xl w-[62px] py-2 border-2 border-ink"><div id="cdS" class="font-display font-extrabold text-2xl leading-none">11</div><div class="text-[10px] font-bold">SEC</div></div>
+          </div>
+        </div>
+        <div class="hidden sm:block w-px self-stretch bg-ink/10"></div>
+        <div class="hidden sm:block text-sm font-bold leading-relaxed">Use codes at checkout:<br><button onclick="copyCode('VOLT20')" class="sticker bg-sunny rounded-lg px-2 py-0.5 font-extrabold hover:scale-105 transition">VOLT20 = 20% OFF 📋</button><br><button onclick="copyCode('FLASH15')" class="sticker bg-limepop rounded-lg px-2 py-0.5 font-extrabold mt-1.5 hover:scale-105 transition">FLASH15 = 15% OFF 📋</button></div>
+      </div>
+    </div>
+
+    <div id="flashGrid" class="mt-8 grid md:grid-cols-3 gap-5"></div>
+  </div>
+</section>
+<div class="tick"></div>
+
+<!-- SHOP -->
+<section id="shop" class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div>
+      <span class="sticker bg-aqua text-xs font-extrabold px-3 py-1.5 rounded-full rotate-[-2deg]">🛍️ 120+ PRODUCTS • IN STOCK NOW</span>
+      <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-3">Shop the <span class="grad-text">Drop</span></h2>
+      <p class="font-medium text-black/60 mt-1">Filter by vibe. Tap a card for colors, storage & full specs.</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 bg-white border-[2.5px] border-ink rounded-full px-4 h-12 w-[240px] shadow-popsm">
+        <i class="fa-solid fa-magnifying-glass opacity-50"></i>
+        <input id="shopSearch" oninput="onSearch(this.value)" placeholder="Search..." class="w-full bg-transparent outline-none font-bold text-sm"/>
+      </div>
+      <select id="sortSel" onchange="setSort(this.value)" class="h-12 bg-ink text-white border-[2.5px] border-ink rounded-full px-4 font-bold text-sm cursor-pointer">
+        <option value="pop">✨ Popular</option>
+        <option value="low">💰 Price: Low → High</option>
+        <option value="high">💎 Price: High → Low</option>
+        <option value="rate">⭐ Top Rated</option>
+        <option value="off">🔥 Biggest Discount</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="catPills" class="mt-6 flex gap-2.5 overflow-x-auto no-scrollbar pb-2"></div>
+  <div class="mt-2 flex items-center justify-between text-sm font-bold text-black/60"><span id="resultCount"></span><span class="hidden sm:inline">💡 Tip: click <b class="text-black">Quick View</b> to customize storage & color</span></div>
+  <div id="productGrid" class="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"></div>
+</section>
+
+<!-- PERKS -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="card-pop rounded-2xl p-5 grad-bg text-white"><i class="fa-solid fa-bolt text-2xl"></i><div class="font-display font-extrabold text-xl mt-2">Express Pickup</div><p class="text-sm font-medium text-white/90">Order online, grab in 30 mins from store. Zero waiting.</p></div>
+    <div class="card-pop rounded-2xl p-5 bg-ink text-white"><i class="fa-solid fa-screwdriver-wrench text-2xl text-sunny"></i><div class="font-display font-extrabold text-xl mt-2">45-Min Repairs</div><p class="text-sm font-medium text-white/70">Genuine parts, live tracking & 6-month warranty.</p></div>
+    <div class="card-pop rounded-2xl p-5 grad-bg2 text-white"><i class="fa-solid fa-recycle text-2xl"></i><div class="font-display font-extrabold text-xl mt-2">Best Trade-In</div><p class="text-sm font-medium text-white/90">Instant cash for your old phone. Up to $620 value.</p></div>
+    <div class="card-pop rounded-2xl p-5 grad-bg3"><i class="fa-solid fa-credit-card text-2xl"></i><div class="font-display font-extrabold text-xl mt-2">0% EMI + COD</div><p class="text-sm font-semibold text-black/70">Split it, cash it, UPI it. Pay your way, always.</p></div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking" class="mt-10 relative overflow-hidden border-y-[3px] border-ink bg-gradient-to-br from-[#E9DDFF] via-[#FFE0EF] to-[#FFF3C4] py-14">
+  <div class="absolute inset-0 dotted opacity-10"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="sticker bg-ink text-white text-xs font-extrabold px-4 py-1.5 rounded-full">📅 ONLINE BOOKING • NO QUEUE • INSTANT TOKEN</span>
+      <h2 class="font-display font-extrabold text-4xl sm:text-6xl mt-3">Book in <span class="grad-text">30 seconds</span></h2>
+      <p class="font-medium text-black/60 mt-2">Repairs, free checkups, new-phone demos & doorstep pickup. Pick a service, grab a slot, done.</p>
+      <div class="mt-5 inline-flex bg-white border-[2.5px] border-ink rounded-full p-1.5 shadow-popsm gap-1">
+        <button onclick="setBookTab('repair')" id="tab-repair" class="booktab px-5 py-2.5 rounded-full font-extrabold text-sm bg-ink text-white transition">🔧 Repair</button>
+        <button onclick="setBookTab('demo')" id="tab-demo" class="booktab px-5 py-2.5 rounded-full font-extrabold text-sm transition">📱 Buy / Demo</button>
+        <button onclick="setBookTab('pickup')" id="tab-pickup" class="booktab px-5 py-2.5 rounded-full font-extrabold text-sm transition">🛵 Doorstep</button>
+      </div>
+    </div>
+
+    <div class="mt-8 grid lg:grid-cols-[1.5fr_1fr] gap-6 items-start">
+      <!-- form -->
+      <div class="card-pop bg-white rounded-3xl p-5 sm:p-7">
+        <div class="flex items-center justify-between">
+          <h3 class="font-display font-extrabold text-2xl" id="bookTitle">What needs fixing?</h3>
+          <span class="sticker bg-limepop text-[11px] font-extrabold px-3 py-1 rounded-full rotate-2">STEP <span id="bookStep">1</span>/4</span>
+        </div>
+        <div id="svcGrid" class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+
+        <div class="mt-5 grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-extrabold tracking-widest opacity-60">DEVICE BRAND</label>
+            <select id="bkBrand" class="mt-1 w-full h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold bg-[#FFFBEA]">
+              <option>Apple</option><option>Samsung</option><option>Google Pixel</option><option>OnePlus</option><option>Xiaomi / Redmi</option><option>Nothing</option><option>Oppo / Vivo / Realme</option><option>Motorola</option><option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-extrabold tracking-widest opacity-60">MODEL (e.g. iPhone 13, S23)</label>
+            <input id="bkModel" placeholder="Type your model..." class="mt-1 w-full h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold bg-[#FFFBEA] placeholder:text-black/30"/>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <label class="text-xs font-extrabold tracking-widest opacity-60">PICK A DAY — NEXT 14 DAYS</label>
+          <div id="dayRow" class="mt-2 flex gap-2 overflow-x-auto no-scrollbar pb-2"></div>
+        </div>
+        <div class="mt-3">
+          <label class="text-xs font-extrabold tracking-widest opacity-60">PICK A TIME SLOT</label>
+          <div id="slotRow" class="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
+        </div>
+
+        <div class="mt-5 grid sm:grid-cols-2 gap-3">
+          <input id="bkName" placeholder="Your name *" class="h-12 border-[2.5px] border-ink rounded-xl px-4 font-bold placeholder:text-black/30"/>
+          <input id="bkPhone" placeholder="Phone number *" maxlength="12" class="h-12 border-[2.5px] border-ink rounded-xl px-4 font-bold placeholder:text-black/30"/>
+        </div>
+        <textarea id="bkNote" rows="2" placeholder="Describe the issue (optional) — e.g. cracked top-left, battery drains fast..." class="mt-3 w-full border-[2.5px] border-ink rounded-xl px-4 py-3 font-semibold placeholder:text-black/30"></textarea>
+        <label class="mt-3 flex items-center justify-between bg-[#FFF3C4] border-[2.5px] border-ink rounded-xl px-4 py-3 cursor-pointer">
+          <span class="font-extrabold text-sm">🚀 Express priority <span class="text-xs font-bold opacity-60">— jump queue (+$19, done first)</span></span>
+          <input id="bkExpress" type="checkbox" onchange="renderBookingSummary()" class="w-6 h-6 accent-[#FF2E9A]"/>
+        </label>
+        <button onclick="confirmBooking()" class="btn-pop w-full mt-4 grad-bg text-white rounded-2xl h-[56px] font-display font-extrabold text-lg"><i class="fa-solid fa-calendar-check mr-2"></i> CONFIRM BOOKING →</button>
+        <p class="text-center text-xs font-bold text-black/50 mt-2">Free cancellation up to 2 hrs before • Pay in store or online</p>
+      </div>
+
+      <!-- summary + my bookings -->
+      <div class="space-y-5">
+        <div class="card-pop bg-ink text-white rounded-3xl p-6 relative overflow-hidden">
+          <div class="absolute inset-0 dotted-light opacity-20"></div>
+          <div class="relative">
+            <div class="flex items-center justify-between"><h4 class="font-display font-extrabold text-xl">🧾 Live Estimate</h4><span class="text-[11px] font-extrabold bg-limepop text-black px-2.5 py-1 rounded-full border-2 border-white">UPDATED LIVE</span></div>
+            <div id="bookSummary" class="mt-3 space-y-2 text-sm font-semibold"></div>
+            <div class="mt-4 pt-4 border-t border-dashed border-white/25 flex items-end justify-between">
+              <span class="font-bold text-white/70">Estimated total</span><span id="bookTotal" class="font-display font-extrabold text-4xl text-sunny">$49</span>
+            </div>
+            <div class="mt-2 text-[12px] font-bold text-white/60">Final quote confirmed after free diagnosis in store.</div>
+          </div>
+        </div>
+        <div class="card-pop bg-white rounded-3xl p-6">
+          <div class="flex items-center justify-between"><h4 class="font-display font-extrabold text-xl">🎫 My Bookings <span id="bkCount" class="text-sm bg-ink text-white rounded-full px-2.5 py-0.5">0</span></h4><button onclick="renderMyBookings()" class="text-xs font-extrabold underline">Refresh</button></div>
+          <div id="myBookings" class="mt-3 space-y-3 max-h-[320px] overflow-y-auto pr-1"><p class="text-sm font-semibold text-black/50">No bookings yet — your tokens will appear here.</p></div>
+          <div class="mt-4 bg-[#E6FFB3] border-2 border-ink rounded-2xl p-4 text-sm font-bold flex gap-3"><i class="fa-solid fa-store text-xl"></i><span>Voltzy Central — 44 Neon Street, Open 10AM–9PM daily.<br><span class="opacity-60">Walk-ins welcome • Avg wait today: 12 mins</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRADE IN -->
+<section id="tradein" class="bg-ink text-white py-14 relative overflow-hidden">
+  <div class="blob w-[380px] h-[380px] bg-bubble left-[-80px] top-[10%] opacity-40"></div>
+  <div class="blob w-[380px] h-[380px] bg-aqua right-[-80px] bottom-[-60px] opacity-40"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-8 items-center">
+    <div>
+      <span class="sticker bg-limepop text-ink text-xs font-extrabold px-4 py-1.5 rounded-full rotate-[-2deg]">♻️ INSTANT TRADE-IN ESTIMATOR</span>
+      <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-3 leading-tight">Your old phone = <span class="text-limepop">cold hard cash.</span></h2>
+      <p class="text-white/70 font-medium mt-2">Slide, tap, done. Get an instant estimate then book a free doorstep evaluation.</p>
+      <div class="mt-6 card-pop bg-white text-ink rounded-3xl p-5 sm:p-6">
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div><label class="text-xs font-extrabold tracking-widest opacity-60">BRAND</label>
+            <select id="tiBrand" onchange="calcTrade()" class="mt-1 w-full h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"><option>Apple</option><option>Samsung</option><option>Google</option><option>OnePlus</option><option>Xiaomi</option><option>Other</option></select></div>
+          <div><label class="text-xs font-extrabold tracking-widest opacity-60">ORIGINAL PRICE ($)</label>
+            <input id="tiPrice" type="number" value="999" oninput="calcTrade()" class="mt-1 w-full h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"/></div>
+        </div>
+        <div class="mt-4"><div class="flex justify-between text-xs font-extrabold"><span>AGE: <span id="tiAgeV">2 years</span></span><span>CONDITION: <span id="tiCondV">Good</span></span></div>
+          <label class="text-[11px] font-extrabold opacity-60 mt-2 block">HOW OLD?</label><input id="tiAge" type="range" min="0" max="6" value="2" oninput="calcTrade()" class="range w-full"/>
+          <label class="text-[11px] font-extrabold opacity-60 mt-2 block">CONDITION</label><input id="tiCond" type="range" min="1" max="5" value="4" oninput="calcTrade()" class="range w-full"/>
+          <div class="flex justify-between text-[10px] font-extrabold opacity-60"><span>Dead</span><span>Scratched</span><span>Okay</span><span>Good</span><span>Mint</span></div>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-2 text-sm font-bold">
+          <label class="border-2 border-ink rounded-xl px-3 py-2.5 flex items-center gap-2 cursor-pointer"><input type="checkbox" class="tiExtra w-4 h-4 accent-black" onchange="calcTrade()" value="40"/> Box + Bill (+$40)</label>
+          <label class="border-2 border-ink rounded-xl px-3 py-2.5 flex items-center gap-2 cursor-pointer"><input type="checkbox" class="tiExtra w-4 h-4 accent-black" onchange="calcTrade()" value="25"/> Charger (+$25)</label>
+        </div>
+        <button onclick="bookTradeEval()" class="btn-pop w-full mt-4 bg-ink text-white rounded-2xl h-[52px] font-extrabold">BOOK FREE DOORSTEP EVALUATION →</button>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <div class="relative">
+        <div class="card-pop bg-gradient-to-br from-sunny via-[#FF9D00] to-tang rounded-[2.5rem] p-8 w-[300px] sm:w-[360px] text-center text-ink rotate-2">
+          <div class="text-xs font-extrabold tracking-[.25em]">ESTIMATED VALUE</div>
+          <div id="tiValue" class="font-display font-extrabold text-[64px] sm:text-[76px] leading-none mt-1">$512</div>
+          <div class="sticker bg-white rounded-full px-4 py-1.5 text-xs font-extrabold inline-block mt-2">+ EXTRA $50 IF YOU UPGRADE TODAY</div>
+          <div class="mt-4 bg-ink text-white rounded-2xl p-3 text-left text-[13px] font-bold flex gap-2 items-center"><i class="fa-solid fa-bolt text-limepop text-xl"></i> Highest in the city — we beat any written quote by 5%.</div>
+          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&q=80&auto=format&fit=crop" class="mt-4 w-full h-44 object-cover rounded-2xl border-[2.5px] border-ink" alt="trade"/>
+        </div>
+        <div class="absolute -left-10 top-6 sticker bg-bubble text-white font-extrabold text-xs px-3 py-2 rounded-xl rotate-[-10deg] wiggle">CASH IN 10 MINS 💸</div>
+        <div class="absolute -right-8 bottom-16 sticker bg-aqua font-extrabold text-xs px-3 py-2 rounded-xl rotate-[8deg] floaty">FREE PICKUP 🛵</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+  <div class="text-center"><span class="sticker bg-bubble text-white text-xs font-extrabold px-4 py-1.5 rounded-full">💬 4.9 STARS • 3,200+ GOOGLE REVIEWS</span>
+    <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-3">The street <span class="grad-text">loves us</span></h2>
+  </div>
+  <div class="mt-8 relative">
+    <div id="revTrack" class="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2"></div>
+    <div class="mt-4 flex justify-center gap-2">
+      <button onclick="scrollRevs(-1)" class="btn-pop w-12 h-12 rounded-full bg-white"><i class="fa-solid fa-arrow-left"></i></button>
+      <button onclick="scrollRevs(1)" class="btn-pop w-12 h-12 rounded-full bg-ink text-white"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+  </div>
+  <!-- newsletter -->
+  <div class="mt-10 card-pop grad-bg2 rounded-[2rem] p-8 sm:p-10 text-white relative overflow-hidden">
+    <div class="absolute inset-0 dotted-light opacity-25"></div>
+    <div class="relative grid md:grid-cols-2 gap-6 items-center">
+      <div><h3 class="font-display font-extrabold text-3xl sm:text-4xl leading-tight">Get $15 OFF your first order. Plus secret drops. 🤫</h3><p class="text-white/80 font-medium mt-2">Join 20,000+ insiders. One juicy email a week. No spam, only bangers.</p></div>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input id="nlEmail" placeholder="you@email.com" class="flex-1 h-[54px] rounded-2xl border-[2.5px] border-ink px-4 font-bold text-ink placeholder:text-black/40"/>
+        <button onclick="subscribe()" class="btn-pop bg-sunny text-ink rounded-2xl px-7 h-[54px] font-extrabold">CLAIM $15 →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section id="visit" class="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+  <div class="grid lg:grid-cols-2 gap-5">
+    <div class="card-pop rounded-3xl overflow-hidden bg-white">
+      <div class="relative h-64">
+        <img src="https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?w=900&q=80&auto=format&fit=crop" class="w-full h-full object-cover" alt="store"/>
+        <div class="absolute top-4 left-4 sticker bg-limepop text-xs font-extrabold px-3 py-1.5 rounded-full">● OPEN NOW • CLOSES 9PM</div>
+        <div class="absolute bottom-4 left-4 right-4 bg-white/95 border-[2.5px] border-ink rounded-2xl p-3 flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl grad-bg border-2 border-ink flex items-center justify-center text-white"><i class="fa-solid fa-location-dot"></i></div>
+          <div><div class="font-extrabold text-sm">Voltzy Central — 44 Neon Street</div><div class="text-xs font-bold opacity-60">2 mins from Metro Gate 3 • Free parking</div></div>
+        </div>
+      </div>
+      <div class="p-5 grid grid-cols-3 gap-3 text-center text-sm font-extrabold">
+        <div class="bg-[#FFF3C4] border-2 border-ink rounded-xl p-3"><i class="fa-solid fa-clock"></i><br>10AM–9PM<br><span class="text-[11px] opacity-60">Open all days</span></div>
+        <div class="bg-[#E6FFB3] border-2 border-ink rounded-xl p-3"><i class="fa-solid fa-phone"></i><br>+1 555-0199<br><span class="text-[11px] opacity-60">Call / WhatsApp</span></div>
+        <div class="bg-[#CFF4FF] border-2 border-ink rounded-xl p-3"><i class="fa-solid fa-truck-fast"></i><br>Same-day<br><span class="text-[11px] opacity-60">Within 8 miles</span></div>
+      </div>
+    </div>
+    <div class="card-pop rounded-3xl bg-ink text-white p-6 sm:p-8 relative overflow-hidden">
+      <div class="absolute inset-0 dotted-light opacity-15"></div>
+      <div class="relative">
+        <h3 class="font-display font-extrabold text-3xl">Say hi. Ask anything. 👋</h3>
+        <p class="text-white/60 font-medium text-sm mt-1">We reply within 15 mins in store hours. Really.</p>
+        <div class="mt-4 grid sm:grid-cols-2 gap-3">
+          <input id="cName" placeholder="Name" class="h-12 rounded-xl border-[2.5px] border-white/20 bg-white/10 px-4 font-bold placeholder:text-white/40"/>
+          <input id="cPhone" placeholder="Phone" class="h-12 rounded-xl border-[2.5px] border-white/20 bg-white/10 px-4 font-bold placeholder:text-white/40"/>
+        </div>
+        <select id="cTopic" class="mt-3 w-full h-12 rounded-xl border-[2.5px] border-white/20 bg-white/10 px-4 font-bold"><option class="text-black">I want a price / EMI quote</option><option class="text-black">Repair question</option><option class="text-black">Bulk / corporate order</option><option class="text-black">Franchise enquiry</option></select>
+        <textarea id="cMsg" rows="3" placeholder="Your message..." class="mt-3 w-full rounded-xl border-[2.5px] border-white/20 bg-white/10 px-4 py-3 font-semibold placeholder:text-white/40"></textarea>
+        <button onclick="sendContact()" class="btn-pop w-full mt-3 bg-limepop text-ink rounded-2xl h-[52px] font-extrabold border-white" style="box-shadow:5px 5px 0 #B6FF2E33, 5px 5px 0 rgba(255,255,255,.9)">SEND MESSAGE →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-ink text-white border-t-[3px] border-ink relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid md:grid-cols-4 gap-8">
+    <div><div class="flex items-center gap-2"><div class="w-10 h-10 rounded-xl grad-bg border-2 border-white flex items-center justify-center"><i class="fa-solid fa-bolt"></i></div><div class="font-display font-extrabold text-2xl">VOLTZY.</div></div>
+      <p class="text-white/60 text-sm font-medium mt-3">The loudest little mobile shop in town. Phones, repairs, accessories & vibes since 2016.</p>
+      <div class="flex gap-2 mt-4"><a href="#" class="w-10 h-10 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center hover:bg-bubble transition"><i class="fa-brands fa-instagram"></i></a><a href="#" class="w-10 h-10 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center hover:bg-aqua hover:text-black transition"><i class="fa-brands fa-x-twitter"></i></a><a href="#" class="w-10 h-10 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center hover:bg-grape transition"><i class="fa-brands fa-youtube"></i></a><a href="#" class="w-10 h-10 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center hover:bg-limepop hover:text-black transition"><i class="fa-brands fa-whatsapp"></i></a></div>
+    </div>
+    <div><div class="font-extrabold tracking-widest text-xs text-sunny">SHOP</div><ul class="mt-3 space-y-2 text-sm font-semibold text-white/70"><li><a href="#shop" class="hover:text-white">Smartphones</a></li><li><a href="#shop" class="hover:text-white">Tablets & Watches</a></li><li><a href="#shop" class="hover:text-white">Audio & Chargers</a></li><li><a href="#shop" class="hover:text-white">Refurbished</a></li><li><a href="#tradein" class="hover:text-white">Trade-In</a></li></ul></div>
+    <div><div class="font-extrabold tracking-widest text-xs text-bubble">SERVICES</div><ul class="mt-3 space-y-2 text-sm font-semibold text-white/70"><li><a href="#booking" class="hover:text-white">Book a Repair</a></li><li><a href="#booking" class="hover:text-white">Screen & Battery</a></li><li><a href="#booking" class="hover:text-white">Doorstep Pickup</a></li><li><a href="#booking" class="hover:text-white">EMI & Insurance</a></li><li><a href="#visit" class="hover:text-white">Bulk Orders</a></li></ul></div>
+    <div><div class="font-extrabold tracking-widest text-xs text-aqua">WE ACCEPT</div><div class="mt-3 flex flex-wrap gap-2 text-xs font-extrabold"><span class="bg-white text-black px-3 py-1.5 rounded-lg">VISA</span><span class="bg-white text-black px-3 py-1.5 rounded-lg">MASTERCARD</span><span class="bg-white text-black px-3 py-1.5 rounded-lg">UPI</span><span class="bg-white text-black px-3 py-1.5 rounded-lg">COD</span><span class="bg-limepop text-black px-3 py-1.5 rounded-lg">0% EMI</span></div><p class="text-xs text-white/50 font-semibold mt-3">© 2026 Voltzy Mobile Megastore.<br>Made with ⚡ & too much coffee.</p></div>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div id="cartOverlay" onclick="closeCart()" class="hidden fixed inset-0 modal-bg z-[70]"></div>
+<aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[440px] bg-[#FFFDF3] border-l-[3px] border-ink z-[71] translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="p-5 border-b-[2.5px] border-ink bg-sunny flex items-center justify-between">
+    <div><div class="font-display font-extrabold text-2xl">Your Bag 🛍️</div><div id="cartSub" class="text-xs font-extrabold opacity-60">0 ITEMS</div></div>
+    <button onclick="closeCart()" class="w-11 h-11 rounded-full bg-ink text-white border-[2.5px] border-ink flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="px-5 pt-3"><div class="bg-white border-2 border-ink rounded-xl p-3 text-xs font-bold"><span class="font-extrabold">🎁 Add <span id="shipMsg" class="text-bubble">$50</span> more for FREE express delivery!</span><div class="mt-2 h-2.5 rounded-full bg-black/10 border border-ink overflow-hidden"><div id="shipBar" class="h-full grad-bg transition-all" style="width:0%"></div></div></div></div>
+  <div id="cartItems" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+  <div class="p-5 border-t-[2.5px] border-ink bg-white space-y-3">
+    <div class="flex gap-2"><input id="promoInp" placeholder="Promo code? Try VOLT20" class="flex-1 h-11 border-[2.5px] border-ink rounded-xl px-3 font-bold text-sm uppercase placeholder:normal-case placeholder:text-black/35"/><button onclick="applyPromo()" class="btn-pop bg-limepop rounded-xl px-4 h-11 text-sm">APPLY</button></div>
+    <div id="promoMsg" class="text-xs font-extrabold"></div>
+    <div class="text-sm font-bold space-y-1"><div class="flex justify-between"><span class="opacity-60">Subtotal</span><span id="ctSub">$0</span></div><div class="flex justify-between text-bubble"><span>Discount</span><span id="ctDisc">-$0</span></div><div class="flex justify-between"><span class="opacity-60">Delivery</span><span id="ctShip">$0</span></div><div class="flex justify-between font-display font-extrabold text-xl pt-1 border-t-2 border-dashed border-ink/20"><span>Total</span><span id="ctTotal">$0</span></div></div>
+    <div class="grid grid-cols-2 gap-2"><button onclick="closeCart()" class="btn-pop bg-white rounded-xl h-12 text-sm">CONTINUE SHOPPING</button><button onclick="openCheckout()" class="btn-pop grad-bg text-white rounded-xl h-12 text-sm">CHECKOUT →</button></div>
+  </div>
+</aside>
+
+<!-- WISHLIST DRAWER -->
+<div id="wishOverlay" onclick="toggleWishlistDrawer(true)" class="hidden fixed inset-0 modal-bg z-[70]"></div>
+<aside id="wishDrawer" class="fixed top-0 left-0 h-full w-full sm:w-[380px] bg-white border-r-[3px] border-ink z-[71] -translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="p-5 border-b-[2.5px] border-ink bg-bubble text-white flex items-center justify-between"><div class="font-display font-extrabold text-2xl">Wishlist 💖</div><button onclick="toggleWishlistDrawer(true)" class="w-10 h-10 rounded-full bg-white text-black border-2 border-ink flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div>
+  <div id="wishItems" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+</aside>
+
+<!-- QUICK VIEW MODAL -->
+<div id="qvOverlay" class="hidden fixed inset-0 modal-bg z-[80] p-4 overflow-y-auto">
+  <div class="max-w-4xl mx-auto card-pop bg-[#FFFDF3] rounded-3xl overflow-hidden my-6">
+    <div class="grid md:grid-cols-2">
+      <div id="qvImgWrap" class="relative min-h-[320px] p-6 flex items-center justify-center"></div>
+      <div class="p-6 sm:p-8">
+        <div class="flex items-start justify-between gap-3"><div><div id="qvBadge"></div><h3 id="qvName" class="font-display font-extrabold text-3xl leading-tight mt-1"></h3><div id="qvRate" class="text-sm font-bold mt-1"></div></div><button onclick="closeQV()" class="w-10 h-10 shrink-0 rounded-full bg-ink text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div>
+        <p id="qvDesc" class="text-sm font-medium text-black/60 mt-2"></p>
+        <div id="qvSpecs" class="mt-3 flex flex-wrap gap-1.5"></div>
+        <div class="mt-4"><div class="text-xs font-extrabold tracking-widest opacity-60">COLOR</div><div id="qvColors" class="mt-1.5 flex gap-2"></div></div>
+        <div class="mt-3"><div class="text-xs font-extrabold tracking-widest opacity-60">STORAGE</div><div id="qvStor" class="mt-1.5 flex gap-2 flex-wrap"></div></div>
+        <div class="mt-4 flex items-end justify-between"><div><div id="qvOld" class="text-sm font-bold text-black/40 line-through"></div><div id="qvPrice" class="font-display font-extrabold text-4xl"></div></div><div class="flex items-center gap-2 bg-white border-[2.5px] border-ink rounded-full px-2 py-1"><button onclick="qvQtyChange(-1)" class="w-8 h-8 rounded-full bg-black/5 font-extrabold">−</button><span id="qvQty" class="font-extrabold w-6 text-center">1</span><button onclick="qvQtyChange(1)" class="w-8 h-8 rounded-full bg-black/5 font-extrabold">+</button></div></div>
+        <div class="mt-4 grid grid-cols-2 gap-2"><button id="qvAdd" class="btn-pop grad-bg text-white rounded-xl h-12 text-sm font-extrabold">ADD TO BAG</button><button id="qvBuy" class="btn-pop bg-ink text-white rounded-xl h-12 text-sm font-extrabold">BUY NOW ⚡</button></div>
+        <div class="mt-3 grid grid-cols-3 gap-2 text-[11px] font-extrabold text-center"><span class="bg-[#E6FFB3] border-2 border-ink rounded-lg py-1.5">✓ 1-YR WARRANTY</span><span class="bg-[#FFF3C4] border-2 border-ink rounded-lg py-1.5">↩ 7-DAY RETURN</span><span class="bg-[#CFF4FF] border-2 border-ink rounded-lg py-1.5">⚡ 30-MIN PICKUP</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="coOverlay" class="hidden fixed inset-0 modal-bg z-[85] p-4 overflow-y-auto">
+  <div class="max-w-2xl mx-auto card-pop bg-[#FFFDF3] rounded-3xl my-6 overflow-hidden">
+    <div class="bg-ink text-white p-5 flex items-center justify-between"><div><div class="font-display font-extrabold text-2xl">Checkout ⚡</div><div id="coStepsLabel" class="text-xs font-bold text-white/60">Step 1 of 3 — Review & Details</div></div><button onclick="closeCheckout()" class="w-10 h-10 rounded-full bg-white/15 border-2 border-white/25 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="px-6 pt-5 flex gap-2" id="coDots">
+      <div class="flex-1 h-2.5 rounded-full bg-ink border border-ink coDot"></div><div class="flex-1 h-2.5 rounded-full bg-black/10 border border-ink coDot"></div><div class="flex-1 h-2.5 rounded-full bg-black/10 border border-ink coDot"></div>
+    </div>
+    <div class="p-6">
+      <div id="coStep1">
+        <div id="coReview" class="space-y-2 max-h-[220px] overflow-y-auto"></div>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          <button onclick="setFulfil('pickup')" id="fPickup" class="payM active border-[2.5px] border-ink rounded-2xl p-3 text-left"><div class="font-extrabold text-sm">🏃 Pickup — FREE</div><div class="text-xs font-bold opacity-60">Ready in 30 mins</div></button>
+          <button onclick="setFulfil('delivery')" id="fDelivery" class="payM border-[2.5px] border-ink rounded-2xl p-3 text-left bg-white"><div class="font-extrabold text-sm">🛵 Delivery — $4.9</div><div class="text-xs font-bold opacity-60">Same-day, free over $50</div></button>
+        </div>
+        <div class="mt-3 grid sm:grid-cols-2 gap-2"><input id="oName" placeholder="Full name *" class="h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"/><input id="oPhone" placeholder="Phone *" class="h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"/></div>
+        <input id="oAddr" placeholder="Address (for delivery) / note for pickup" class="mt-2 w-full h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"/>
+        <button onclick="coNext(2)" class="btn-pop w-full mt-3 grad-bg text-white rounded-2xl h-[52px] font-extrabold">CONTINUE TO PAYMENT →</button>
+      </div>
+      <div id="coStep2" class="hidden">
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="setPay('card')" id="pCard" class="payM active border-[2.5px] border-ink rounded-2xl p-3 font-extrabold text-sm bg-white">💳 Card</button>
+          <button onclick="setPay('upi')" id="pUpi" class="payM border-[2.5px] border-ink rounded-2xl p-3 font-extrabold text-sm bg-white">📱 UPI</button>
+          <button onclick="setPay('cod')" id="pCod" class="payM border-[2.5px] border-ink rounded-2xl p-3 font-extrabold text-sm bg-white">💵 COD</button>
+        </div>
+        <div id="payCardBox" class="mt-4">
+          <div class="rounded-2xl border-[2.5px] border-ink grad-bg2 text-white p-5 relative overflow-hidden"><div class="absolute inset-0 dotted-light opacity-25"></div><div class="relative flex justify-between items-center"><i class="fa-brands fa-cc-visa text-3xl"></i><i class="fa-solid fa-wifi rotate-90 opacity-70"></i></div><div id="cardPrevNum" class="relative font-mono font-bold text-xl tracking-[.15em] mt-4">•••• •••• •••• ••••</div><div class="relative flex justify-between mt-3 text-xs font-bold"><span id="cardPrevName">YOUR NAME</span><span id="cardPrevExp">MM/YY</span></div></div>
+          <div class="mt-3 grid gap-2"><input id="ccNum" maxlength="19" oninput="cardPreview()" placeholder="Card number 4242 4242 4242 4242" class="h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"/><div class="grid grid-cols-2 gap-2"><input id="ccExp" oninput="cardPreview()" placeholder="MM/YY" class="h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"/><input id="ccCvv" maxlength="4" placeholder="CVV" class="h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"/></div></div>
+        </div>
+        <div id="payUpiBox" class="hidden mt-4 bg-white border-[2.5px] border-ink rounded-2xl p-4"><label class="text-xs font-extrabold">YOUR UPI ID</label><input id="upiId" placeholder="name@okbank" class="mt-1 w-full h-12 border-[2.5px] border-ink rounded-xl px-3 font-bold"/></div>
+        <div id="payCodBox" class="hidden mt-4 bg-[#FFF3C4] border-[2.5px] border-ink rounded-2xl p-4 text-sm font-bold">Pay cash / card when your order arrives or at pickup. Please keep exact change ready. 😄</div>
+        <div class="mt-4 bg-black/5 border-2 border-ink rounded-2xl p-4 text-sm font-bold flex justify-between"><span>Total to pay</span><span id="coTotalLbl" class="font-display font-extrabold text-2xl">$0</span></div>
+        <div class="mt-3 grid grid-cols-[auto_1fr] gap-2"><button onclick="coNext(1)" class="btn-pop bg-white rounded-2xl px-5 h-[52px] font-extrabold">← BACK</button><button onclick="placeOrder()" id="payBtn" class="btn-pop grad-bg text-white rounded-2xl h-[52px] font-extrabold">PAY NOW 🔒</button></div>
+      </div>
+      <div id="coStep3" class="hidden text-center">
+        <div class="w-20 h-20 mx-auto rounded-full bg-limepop border-[3px] border-ink flex items-center justify-center text-3xl shadow-popsm">🎉</div>
+        <h3 class="font-display font-extrabold text-3xl mt-3">Order locked in!</h3>
+        <p class="text-sm font-bold text-black/60">Order <span id="ordId" class="text-bubble font-extrabold">#VZ-0000</span> • A confirmation SMS is on its way.</p>
+        <div class="mt-5 text-left bg-white border-[2.5px] border-ink rounded-2xl p-4">
+          <div class="font-extrabold text-sm mb-3">📦 LIVE TRACKING</div>
+          <div id="trackSteps" class="space-y-3"></div>
+          <div class="mt-3 h-2.5 rounded-full bg-black/10 border border-ink overflow-hidden"><div id="trackBar" class="h-full grad-bg transition-all duration-700" style="width:12%"></div></div>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-2"><button onclick="closeCheckout();openCart()" class="btn-pop bg-white rounded-xl h-12 text-sm font-extrabold">VIEW RECEIPT</button><button onclick="closeCheckout()" class="btn-pop bg-ink text-white rounded-xl h-12 text-sm font-extrabold">KEEP SHOPPING →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKING SUCCESS MODAL -->
+<div id="bkOverlay" class="hidden fixed inset-0 modal-bg z-[85] p-4 overflow-y-auto">
+  <div class="max-w-md mx-auto card-pop bg-white rounded-3xl my-10 overflow-hidden text-center">
+    <div class="grad-bg p-6 text-white relative"><div class="absolute inset-0 dotted-light opacity-30"></div><div class="relative text-5xl">🎫</div><h3 class="relative font-display font-extrabold text-3xl mt-1">You're booked!</h3><p class="relative text-sm font-bold text-white/90">Show this token at the store</p></div>
+    <div class="p-6">
+      <div class="ticket-edge bg-[#FFF3C4] border-[2.5px] border-ink p-5">
+        <div id="bkTicketId" class="font-display font-extrabold text-3xl tracking-widest">VM-000000</div>
+        <div id="bkTicketInfo" class="text-sm font-bold mt-1"></div>
+        <div class="mt-3 flex justify-center gap-1.5"><span class="w-2 h-8 bg-ink/80"></span><span class="w-1 h-8 bg-ink/80"></span><span class="w-3 h-8 bg-ink/80"></span><span class="w-1.5 h-8 bg-ink/80"></span><span class="w-2.5 h-8 bg-ink/80"></span><span class="w-1 h-8 bg-ink/80"></span><span class="w-3 h-8 bg-ink/80"></span><span class="w-2 h-8 bg-ink/80"></span><span class="w-1 h-8 bg-ink/80"></span><span class="w-2 h-8 bg-ink/80"></span></div>
+      </div>
+      <button onclick="document.getElementById('bkOverlay').classList.add('hidden')" class="btn-pop w-full mt-4 bg-ink text-white rounded-2xl h-[52px] font-extrabold">AWESOME, DONE ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div id="toasts" class="fixed bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-5 z-[95] space-y-2 w-[92%] sm:w-[360px]"></div>
+<button id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="hidden fixed bottom-5 left-5 z-[60] w-12 h-12 rounded-full bg-ink text-sunny border-[2.5px] border-ink shadow-popsm"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script>
+/* ============ DATA ============ */
+const PRODUCTS = [
+ {id:1,name:"Nova X5 Pro 5G",cat:"smartphones",price:899,old:1099,rating:4.9,reviews:2314,stock:9,badge:"BESTSELLER",grad:"linear-gradient(135deg,#FF2E9A,#FF5A1F)",img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&q=80&auto=format&fit=crop",desc:"6.8\" AMOLED 144Hz, 200MP cam, 100W hypercharge. The crowd favourite.",specs:["256GB","12GB RAM","200MP","5500mAh"],colors:["#121212","#FF2E9A","#00D1FF"],stor:[["128GB",0],["256GB",0],["512GB",120]]},
+ {id:2,name:"Galaxy Orbit S24 Ultra",cat:"smartphones",price:1199,old:1399,rating:4.8,reviews:1874,stock:6,badge:"HOT -17%",grad:"linear-gradient(135deg,#7C3AED,#00D1FF)",img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=600&q=80&auto=format&fit=crop",desc:"Titanium frame, S-Pen, 5x zoom. Productivity monster.",specs:["512GB","S-Pen","5x Zoom","IP68"],colors:["#2b2b2b","#C9B99A","#7C3AED"],stor:[["256GB",0],["512GB",0],["1TB",200]]},
+ {id:3,name:"Aura iPhone 15",cat:"smartphones",price:999,old:1099,rating:4.9,reviews:3102,stock:11,badge:"NEW",grad:"linear-gradient(135deg,#00D1FF,#B6FF2E)",img:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80&auto=format&fit=crop",desc:"Dynamic Island, A17 chip,48MP. Buttery smooth iOS.",specs:["128GB","A17","48MP","USB-C"],colors:["#9ECFFF","#FFC6DE","#121212"],stor:[["128GB",0],["256GB",100],["512GB",300]]},
+ {id:4,name:"Pixel Blaze 12",cat:"smartphones",price:749,old:899,rating:4.7,reviews:1290,stock:8,badge:"CAMERA KING",grad:"linear-gradient(135deg,#FFC700,#FF5A1F)",img:"https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=600&q=80&auto=format&fit=crop",desc:"Magic AI camera, clean Android, 7 yrs updates.",specs:["128GB","AI Cam","7yr Updates","IP68"],colors:["#FFCFCF","#D6E7FF","#121212"],stor:[["128GB",0],["256GB",80]]},
+ {id:5,name:"Volt Lite A3 • Budget Beast",cat:"smartphones",price:199,old:279,rating:4.5,reviews:4210,stock:22,badge:"-29%",grad:"linear-gradient(135deg,#B6FF2E,#00D1A1)",img:"https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&q=80&auto=format&fit=crop",desc:"90Hz display, 5000mAh 2-day battery. Unbeatable value.",specs:["128GB","90Hz","5000mAh","5G"],colors:["#00D1A1","#121212","#fff"],stor:[["64GB",-30],["128GB",0]]},
+ {id:6,name:"FoldFlex Z Flip",cat:"smartphones",price:1099,old:1299,rating:4.6,reviews:640,stock:4,badge:"FOLDABLE",grad:"linear-gradient(135deg,#FF2E9A,#7C3AED)",img:"https://images.unsplash.com/photo-1607936854279-55e8a4c64888?w=600&q=80&auto=format&fit=crop",desc:"Pocketable foldable, flex-cam selfies, cover screen widgets.",specs:["256GB","Foldable","Flex Cam","IPX8"],colors:["#7C3AED","#FFC700","#121212"],stor:[["256GB",0],["512GB",120]]},
+ {id:7,name:"AirPulse Buds Pro",cat:"audio",price:129,old:179,rating:4.8,reviews:5120,stock:30,badge:"-28%",grad:"linear-gradient(135deg,#7C3AED,#FF2E9A)",img:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&q=80&auto=format&fit=crop",desc:"ANC -45dB, 36hr case, spatial audio. Silence, then bass.",specs:["ANC","36hr","BT 5.4","Wireless"],colors:["#fff","#121212","#7C3AED"],stor:[["Standard",0]]},
+ {id:8,name:"Volt Watch Pulse 2",cat:"wearables",price:249,old:329,rating:4.7,reviews:1890,stock:14,badge:"NEW",grad:"linear-gradient(135deg,#00D1FF,#7C3AED)",img:"https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80&auto=format&fit=crop",desc:"AMOLED, ECG + SpO2, 14-day battery, 100+ sport modes.",specs:["AMOLED","ECG","14-day","5ATM"],colors:["#121212","#FF5A1F","#00D1FF"],stor:[["46mm",0],["42mm",-20]]},
+ {id:9,name:"HyperCharge 65W GaN",cat:"accessories",price:49,old:79,rating:4.6,reviews:3320,stock:40,badge:"MUST-HAVE",grad:"linear-gradient(135deg,#FFC700,#B6FF2E)",img:"https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&q=80&auto=format&fit=crop",desc:"Charge phone + laptop together. Tiny brick, huge power.",specs:["65W","GaN","2-Port","Foldable"],colors:["#fff","#121212"],stor:[["65W",0],["100W",25]]},
+ {id:10,name:"BoomBox Mini Speaker",cat:"accessories",price:89,old:129,rating:4.7,reviews:980,stock:18,badge:"PARTY",grad:"linear-gradient(135deg,#FF5A1F,#FF2E9A)",img:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&q=80&auto=format&fit=crop",desc:"360° sound, RGB light rings, 20hr playtime, waterproof.",specs:["20hr","IPX7","RGB","TWS Pair"],colors:["#121212","#FF2E9A","#00D1FF"],stor:[["Mini",0]]},
+ {id:11,name:"Tab Titan 11\" Pro",cat:"tablets",price:499,old:649,rating:4.6,reviews:760,stock:7,badge:"CREATOR",grad:"linear-gradient(135deg,#00D1A1,#00D1FF)",img:"https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80&auto=format&fit=crop",desc:"11\" 120Hz, stylus in box, quad speakers. Work + play.",specs:["128GB","120Hz","Stylus","Quad Spk"],colors:["#3a3a3a","#CFF4FF"],stor:[["128GB",0],["256GB",80]]},
+ {id:12,name:"Refurb iPhone 13 • Mint",cat:"refurbished",price:549,old:799,rating:4.8,reviews:1540,stock:5,badge:"ECO -31%",grad:"linear-gradient(135deg,#B6FF2E,#FFC700)",img:"https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=600&q=80&auto=format&fit=crop",desc:"Certified 52-point checked, new battery, 1-yr warranty.",specs:["128GB","New Battery","1yr Warr","Unlocked"],colors:["#FF7AA2","#7FB2FF","#121212"],stor:[["128GB",0],["256GB",70]]},
+];
+const CATS=[["all","✨ All"],["smartphones","📱 Phones"],["tablets","📟 Tablets"],["wearables","⌚ Wearables"],["audio","🎧 Audio"],["accessories","🔌 Accessories"],["refurbished","♻️ Refurb"]];
+const SERVICES={
+ repair:[{n:"Screen Replace",p:79,i:"fa-mobile-screen",d:"Cracked? New OLED + guard"},{n:"Battery Swap",p:49,i:"fa-battery-full",d:"100% health in 30 min"},{n:"Back Glass",p:59,i:"fa-clone",d:"Good as new finish"},{n:"Camera Fix",p:69,i:"fa-camera",d:"Lens + focus repair"},{n:"Water Damage",p:39,i:"fa-droplet",d:"Deep clean + diagnosis"},{n:"Software / Unlock",p:29,i:"fa-microchip",d:"Flash, unlock, data"}],
+ demo:[{n:"New Phone Demo",p:0,i:"fa-mobile-button",d:"Hands-on 20 min session"},{n:"EMI / Upgrade Plan",p:0,i:"fa-credit-card",d:"Best plan in 10 min"},{n:"Data Transfer",p:9,i:"fa-arrow-right-arrow-left",d:"Move everything safely"},{n:"Accessories Trial",p:0,i:"fa-headphones",d:"Try buds, watch, more"},{n:"Kids / Senior Setup",p:9,i:"fa-heart",d:"Simple mode + safety"},{n:"Business Bulk",p:0,i:"fa-briefcase",d:"Quotes for 5+ units"}],
+ pickup:[{n:"Doorstep Pickup",p:0,i:"fa-house-laptop",d:"We collect your device"},{n:"Doorstep Drop",p:5,i:"fa-truck-fast",d:"Repaired, delivered back"},{n:"Buy + Home Setup",p:0,i:"fa-box-open",d:"New phone at your door"},{n:"Trade Evaluation",p:0,i:"fa-recycle",d:"Cash quote at home"},{n:"Screen Guard @Home",p:15,i:"fa-shield-halved",d:"Pro install at home"},{n:"Express Courier",p:12,i:"fa-bolt",d:"2-hr priority lane"}]
+};
+const REVIEWS=[
+ {n:"Priya S.",t:"iPhone 14 • Screen fixed",s:"Cracked my screen at 2pm, was out by 2:40 with a free coffee. I still can't believe it. This place is magic.",c:"#FFD6E8",r:5},
+ {n:"Marcus T.",t:"S24 Ultra • Bought online",s:"Ordered at 11am, picked up at lunch. They transferred all my data + threw in a case. 10/10 energy.",c:"#CFF4FF",r:5},
+ {n:"Aisha K.",t:"Trade-in • Old Pixel",s:"Got $420 for my 3-year-old phone — $60 more than the big chain quoted. Used it straight for buds + watch.",c:"#E6FFB3",r:5},
+ {n:"Diego R.",t:"FoldFlip • Demo booking",s:"Booked a demo online, no waiting at all. Guy spent 25 mins showing camera tricks. Bought it same day on 0% EMI.",c:"#FFF3C4",r:5},
+ {n:"Emma L.",t:"Battery swap • 30 mins",s:"My 4-yr-old phone feels brand new. Genuine battery, health 100%, warranty card included. Super clean shop too.",c:"#E9DDFF",r:4},
+ {n:"Rohan M.",t:"Bulk order • 12 phones",s:"Kitted our whole delivery team. Corporate discount + same-day setup. Owner personally handled everything.",c:"#FFE0B3",r:5},
+];
+
+/* ============ STATE ============ */
+let cart={}, wishlist=new Set(), promo=null, activeCat="all", searchQ="", sortBy="pop";
+let qv={id:null,qty:1,color:0,stor:0};
+let bookTab="repair", selSvc={n:"Screen Replace",p:79}, selDay=null, selSlot=null;
+let fulfil="pickup", payMethod="card", bookings=[];
+let PROMOS={VOLT20:.20,FLASH15:.15,WELCOME10:.10};
+
+const $=id=>document.getElementById(id);
+const money=n=>"$"+(Math.round(n*100)/100).toLocaleString();
+
+function toast(msg,color="#121212"){
+  const t=document.createElement("div");
+  t.className="toast-in card-pop rounded-2xl px-4 py-3 flex items-center gap-3 font-bold text-sm";
+  t.style.background=color==="#121212"?"#121212":color; t.style.color=color==="#121212"?"#fff":"#121212";
+  t.innerHTML=`<span class="w-8 h-8 rounded-full bg-white/20 border-2 ${color==="#121212"?"border-white/30":"border-black/20"} flex items-center justify-center shrink-0"><i class="fa-solid fa-check"></i></span><span>${msg}</span>`;
+  $("toasts").appendChild(t);
+  setTimeout(()=>{t.style.transition=".4s";t.style.opacity="0";t.style.transform="translateY(10px)";setTimeout(()=>t.remove(),400)},2600);
+}
+function boom(big=false){
+  confetti({particleCount:big?160:60,spread:big?100:70,origin:{y:.7},colors:["#FF2E9A","#FF5A1F","#FFC700","#7C3AED","#00D1FF","#B6FF2E"]});
+}
+
+/* ============ SHOP RENDER ============ */
+function stars(r){let h="";for(let i=1;i<=5;i++)h+=`<span class="star text-[13px]">${i<=Math.round(r)?"★":"☆"}</span>`;return h;}
+function offPct(p){return Math.round((1-p.price/p.old)*100);}
+function renderCats(){
+  $("catPills").innerHTML=CATS.map(([v,l])=>`<button onclick="setCat('${v}')" class="catpill ${activeCat===v?'active':''} shrink-0 px-5 h-11 rounded-full border-[2.5px] border-ink font-extrabold text-sm bg-white hover:bg-sunny transition shadow-popsm">${l}</button>`).join("");
+}
+function setCat(v){activeCat=v;renderCats();renderProducts();}
+function setSort(v){sortBy=v;renderProducts();}
+function onSearch(v){searchQ=v.toLowerCase();const ss=$("shopSearch");if(ss&&document.activeElement!==ss)ss.value=v;const gs=$("globalSearch");if(gs&&document.activeElement!==gs)gs.value=v;renderProducts();}
+function toggleSearch(){$("searchBar").classList.toggle("hidden");}
+function filtered(){
+  let list=PRODUCTS.filter(p=>(activeCat==="all"||p.cat===activeCat)&&(p.name.toLowerCase().includes(searchQ)||p.desc.toLowerCase().includes(searchQ)));
+  if(sortBy==="low")list=[...list].sort((a,b)=>a.price-b.price);
+  if(sortBy==="high")list=[...list].sort((a,b)=>b.price-a.price);
+  if(sortBy==="rate")list=[...list].sort((a,b)=>b.rating-a.rating);
+  if(sortBy==="off")list=[...list].sort((a,b)=>offPct(b)-offPct(a));
+  return list;
+}
+function renderProducts(){
+  const list=filtered();
+  $("resultCount").textContent=`Showing ${list.length} of ${PRODUCTS.length} products`;
+  $("productGrid").innerHTML=list.map(p=>{
+    const wished=wishlist.has(p.id);
+    const low=p.stock<=6;
+    return `<div class="card-pop bg-white rounded-3xl overflow-hidden flex flex-col">
+      <div class="relative p-4 pb-0" style="background:${p.grad}">
+        <div class="absolute inset-0 dotted-light opacity-25"></div>
+        <div class="relative flex justify-between items-start">
+          <span class="sticker bg-ink text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full rotate-[-3deg]">${p.badge}</span>
+          <button onclick="toggleWish(${p.id})" class="w-9 h-9 rounded-full ${wished?'bg-bubble text-white':'bg-white'} border-2 border-ink flex items-center justify-center hover:scale-110 transition"><i class="fa-${wished?'solid':'regular'} fa-heart"></i></button>
+        </div>
+        <img onclick="openQV(${p.id})" src="${p.img}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&q=80&auto=format&fit=crop'" class="relative cursor-pointer w-full h-40 sm:h-48 object-cover rounded-2xl border-[2.5px] border-ink mt-2 hover:scale-[1.03] transition" alt="${p.name}"/>
+        ${low?`<span class="relative sticker bg-bubble text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full inline-block mt-2">🔥 Only ${p.stock} left!</span>`:`<span class="relative sticker bg-limepop text-[10px] font-extrabold px-2 py-0.5 rounded-full inline-block mt-2">✓ In stock</span>`}
+      </div>
+      <div class="p-4 flex flex-col flex-1">
+        <div class="flex items-center gap-1">${stars(p.rating)}<span class="text-[11px] font-extrabold opacity-60 ml-1">${p.rating} (${p.reviews.toLocaleString()})</span></div>
+        <h3 onclick="openQV(${p.id})" class="cursor-pointer font-display font-extrabold text-[17px] leading-tight mt-1 hover:text-bubble transition">${p.name}</h3>
+        <div class="flex items-baseline gap-2 mt-1"><span class="font-display font-extrabold text-2xl">${money(p.price)}</span><s class="text-sm font-bold text-black/35">${money(p.old)}</s><span class="text-[11px] font-extrabold bg-limepop border border-ink rounded-full px-1.5">-${offPct(p)}%</span></div>
+        <div class="mt-3 grid grid-cols-[1fr_auto] gap-2 mt-auto">
+          <button onclick="addToCart(${p.id},1)" class="btn-pop grad-bg text-white rounded-xl h-11 text-[13px] font-extrabold"><i class="fa-solid fa-bag-shopping mr-1"></i> ADD</button>
+          <button onclick="openQV(${p.id})" class="btn-pop bg-white rounded-xl h-11 px-3 text-[13px] font-extrabold">VIEW</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("")||`<div class="col-span-full text-center py-14 font-bold text-black/50">No matches for "${searchQ}" — try "buds" or "watch" 😅</div>`;
+}
+function renderFlash(){
+  const feats=[PRODUCTS[5],PRODUCTS[0],PRODUCTS[11]];
+  const sold=[82,64,91];
+  $("flashGrid").innerHTML=feats.map((p,i)=>`
+   <div class="card-pop rounded-3xl overflow-hidden bg-white text-ink rotate-[${i===1?1:-1}deg]">
+     <div class="p-4 flex gap-4" style="background:${p.grad}">
+       <img src="${p.img}" class="w-28 h-32 object-cover rounded-2xl border-[2.5px] border-ink shrink-0" alt=""/>
+       <div class="text-white"><span class="sticker bg-ink text-[10px] font-extrabold px-2 py-0.5 rounded-full">${p.badge}</span>
+         <div class="font-display font-extrabold text-xl leading-tight mt-1 drop-shadow">${p.name}</div>
+         <div class="font-extrabold">${money(p.price)} <s class="opacity-70 text-sm">${money(p.old)}</s></div>
+         <button onclick="addToCart(${p.id},1)" class="mt-2 bg-white text-black border-2 border-ink rounded-xl px-4 py-1.5 text-xs font-extrabold shadow-popsm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition">ADD TO BAG +</button>
+       </div>
+     </div>
+     <div class="p-4"><div class="flex justify-between text-[11px] font-extrabold"><span>🔥 ${sold[i]}% CLAIMED</span><span>HURRY!</span></div>
+       <div class="mt-1.5 h-3 rounded-full border-2 border-ink bg-black/10 overflow-hidden"><div class="h-full grad-bg flashbar transition-all duration-1000" style="width:0%" data-w="${sold[i]}"></div></div></div>
+   </div>`).join("");
+  setTimeout(()=>document.querySelectorAll(".flashbar").forEach(b=>b.style.width=b.dataset.w+"%"),300);
+}
+
+/* ============ WISHLIST ============ */
+function toggleWish(id){
+  if(wishlist.has(id)){wishlist.delete(id);toast("Removed from wishlist");}
+  else{wishlist.add(id);toast("Saved to wishlist 💖","#FF2E9A");boom();}
+  updateBadges();renderProducts();renderWish();
+}
+function updateBadges(){
+  const c=Object.values(cart).reduce((a,b)=>a+b.qty,0);
+  $("cartCount").textContent=c;
+  const w=$("wishCount");w.textContent=wishlist.size;w.classList.toggle("hidden",wishlist.size===0);w.classList.toggle("flex",wishlist.size>0);
+  $("cartSub").textContent=c+" ITEM"+(c===1?"":"S");
+}
+function toggleWishlistDrawer(force){
+  const d=$("wishDrawer"),o=$("wishOverlay");
+  const open=d.classList.contains("-translate-x-full");
+  if(force===true||!open){d.classList.add("-translate-x-full");o.classList.add("hidden");}
+  else{d.classList.remove("-translate-x-full");o.classList.remove("hidden");renderWish();}
+}
+function renderWish(){
+  const items=[...wishlist].map(id=>PRODUCTS.find(p=>p.id===id));
+  $("wishItems").innerHTML=items.length?items.map(p=>`
+    <div class="border-[2.5px] border-ink rounded-2xl p-3 flex gap-3 bg-[#FFFBEA]">
+      <img src="${p.img}" class="w-16 h-16 object-cover rounded-xl border-2 border-ink" alt=""/>
+      <div class="flex-1"><div class="font-extrabold text-sm">${p.name}</div><div class="font-extrabold text-bubble">${money(p.price)}</div>
+      <div class="flex gap-1.5 mt-1.5"><button onclick="addToCart(${p.id},1)" class="text-[11px] font-extrabold bg-ink text-white rounded-lg px-3 py-1">ADD TO BAG</button><button onclick="toggleWish(${p.id})" class="text-[11px] font-extrabold underline opacity-60">Remove</button></div></div>
+    </div>`).join(""):`<div class="text-center py-10 font-bold text-black/50">Nothing saved yet.<br>Tap the 🤍 on any product!</div>`;
+}
+
+/* ============ CART ============ */
+function priceOf(id,storIdx=0){const p=PRODUCTS.find(x=>x.id===id);return p.price+(p.stor[storIdx]?.[1]||0);}
+function addToCart(id,qty=1,storIdx=0,colorIdx=0,silent=false){
+  const key=id+"_"+storIdx+"_"+colorIdx;
+  const p=PRODUCTS.find(x=>x.id===id);
+  if(cart[key])cart[key].qty+=qty;else cart[key]={id,qty,stor:storIdx,color:colorIdx};
+  updateBadges();renderCart();
+  if(!silent){toast(`${p.name} added to bag 🛍️`,"#7C3AED");boom();openCart(true);}
+}
+function openCart(keep){$("cartDrawer").classList.remove("translate-x-full");$("cartOverlay").classList.remove("hidden");renderCart();}
+function closeCart(){$("cartDrawer").classList.add("translate-x-full");$("cartOverlay").classList.add("hidden");}
+function cartTotals(){
+  let sub=0;Object.entries(cart).forEach(([k,v])=>sub+=priceOf(v.id,v.stor)*v.qty);
+  let disc=promo?sub*PROMOS[promo]:0;
+  let ship=sub===0?0:((sub-disc)>=50||fulfil==="pickup"?0:4.9);
+  // upsell guard
+  return{sub,disc,ship,total:Math.max(0,sub-disc+ship)};
+}
+function renderCart(){
+  const box=$("cartItems");const keys=Object.keys(cart);
+  if(!keys.length){box.innerHTML=`<div class="text-center py-10"><div class="text-5xl">🛒</div><div class="font-display font-extrabold text-xl mt-2">Your bag is empty</div><p class="text-sm font-semibold text-black/50">Loud deals await. Go make some noise.</p><button onclick="closeCart();document.getElementById('shop').scrollIntoView({behavior:'smooth'})" class="btn-pop grad-bg text-white rounded-xl px-6 h-11 mt-4 text-sm font-extrabold">START SHOPPING →</button></div>`;}
+  else box.innerHTML=keys.map(k=>{
+    const v=cart[k],p=PRODUCTS.find(x=>x.id===v.id);
+    const storName=p.stor[v.stor]?.[0]||"";
+    return `<div class="border-[2.5px] border-ink rounded-2xl p-3 flex gap-3 bg-white">
+      <img src="${p.img}" class="w-[70px] h-[70px] object-cover rounded-xl border-2 border-ink shrink-0" alt=""/>
+      <div class="flex-1 min-w-0"><div class="font-extrabold text-[13px] leading-tight truncate">${p.name}</div>
+        <div class="text-[11px] font-bold opacity-60">${storName} ${p.colors[v.color]?`• <span class="inline-block w-2.5 h-2.5 rounded-full border border-black align-middle" style="background:${p.colors[v.color]}"></span>`:""}</div>
+        <div class="flex items-center justify-between mt-1.5">
+          <div class="flex items-center gap-1.5 bg-black/5 border-2 border-ink rounded-full px-1 py-0.5"><button onclick="chQty('${k}',-1)" class="w-7 h-7 rounded-full bg-white border border-ink font-extrabold text-sm">−</button><span class="font-extrabold text-sm w-5 text-center">${v.qty}</span><button onclick="chQty('${k}',1)" class="w-7 h-7 rounded-full bg-white border border-ink font-extrabold text-sm">+</button></div>
+          <div class="font-display font-extrabold">${money(priceOf(v.id,v.stor)*v.qty)}</div>
+        </div></div>
+      <button onclick="rmItem('${k}')" class="self-start text-black/30 hover:text-bubble"><i class="fa-solid fa-trash-can"></i></button>
+    </div>`;
+  }).join("")+`<div class="border-[2.5px] border-dashed border-ink rounded-2xl p-3 flex items-center gap-3 bg-[#E6FFB3]">
+    <img src="https://images.unsplash.com/photo-1601593346740-925612772716?w=200&q=70&auto=format&fit=crop" class="w-12 h-12 object-cover rounded-xl border-2 border-ink" alt=""/>
+    <div class="flex-1"><div class="text-xs font-extrabold">Add Tempered Glass — $9 <s class="opacity-50">$19</s></div><div class="text-[11px] font-bold opacity-60">Pairs with any phone</div></div>
+    <button onclick="toast('Screen guard added! 🛡️','#00D1A1');boom()" class="text-[11px] font-extrabold bg-ink text-white rounded-lg px-3 py-1.5">+ ADD</button></div>`;
+  const t=cartTotals();
+  $("ctSub").textContent=money(t.sub);$("ctDisc").textContent="-"+money(t.disc);$("ctShip").textContent=t.ship===0?"FREE":money(t.ship);$("ctTotal").textContent=money(t.total);
+  const need=Math.max(0,50-(t.sub-t.disc));
+  $("shipMsg").textContent=need>0?money(need):"DONE ✓";
+  $("shipBar").style.width=Math.min(100,((t.sub-t.disc)/50)*100)+"%";
+  updateBadges();
+}
+function chQty(k,d){cart[k].qty+=d;if(cart[k].qty<=0)delete cart[k];renderCart();}
+function rmItem(k){delete cart[k];renderCart();toast("Removed from bag");}
+function applyPromo(){
+  const v=$("promoInp").value.trim().toUpperCase();
+  if(PROMOS[v]){promo=v;$("promoMsg").innerHTML=`<span class="text-green-600">✓ ${v} applied — ${PROMOS[v]*100}% off! You're a genius.</span>`;toast(`Promo ${v} applied 🎉`,"#B6FF2E");boom();renderCart();}
+  else{$("promoMsg").innerHTML=`<span class="text-bubble">✗ Invalid code. Try VOLT20 or FLASH15.</span>`;}
+}
+function copyCode(c){navigator.clipboard?.writeText(c);$("promoInp").value=c;toast(`Code ${c} copied — paste at checkout!`,"#FFC700");}
+
+/* ============ QUICK VIEW ============ */
+function openQV(id){
+  const p=PRODUCTS.find(x=>x.id===id);qv={id,qty:1,color:0,stor:0};
+  $("qvImgWrap").style.background=p.grad;
+  $("qvImgWrap").innerHTML=`<div class="absolute inset-0 dotted-light opacity-25"></div><img src="${p.img}" class="relative w-full max-w-[320px] h-[340px] object-cover rounded-3xl border-[3px] border-ink shadow-poplg rotate-[-2deg]" alt=""/><span class="absolute top-8 left-8 sticker bg-ink text-white text-[11px] font-extrabold px-3 py-1 rounded-full rotate-[-4deg]">${p.badge}</span><span class="absolute bottom-8 right-8 sticker bg-limepop text-[11px] font-extrabold px-3 py-1 rounded-full rotate-[3deg]">-${offPct(p)}% TODAY</span>`;
+  $("qvBadge").innerHTML=`<span class="text-[11px] font-extrabold tracking-widest opacity-60 uppercase">${p.cat} • ${p.stock} in stock</span>`;
+  $("qvName").textContent=p.name;
+  $("qvRate").innerHTML=`${stars(p.rating)} <b>${p.rating}</b> • ${p.reviews.toLocaleString()} reviews • <span class="text-green-600 font-extrabold">✓ Verified seller</span>`;
+  $("qvDesc").textContent=p.desc;
+  $("qvSpecs").innerHTML=p.specs.map(s=>`<span class="text-[11px] font-extrabold bg-black/5 border-2 border-ink rounded-full px-2.5 py-1">${s}</span>`).join("");
+  renderQVOptions();updateQVPrice();
+  $("qvAdd").onclick=()=>{addToCart(qv.id,qv.qty,qv.stor,qv.color,true);closeQV();toast("Added with your options! 🛍️","#7C3AED");boom();openCart();};
+  $("qvBuy").onclick=()=>{addToCart(qv.id,qv.qty,qv.stor,qv.color,true);closeQV();openCart();openCheckout();};
+  $("qvOverlay").classList.remove("hidden");document.body.style.overflow="hidden";
+}
+function renderQVOptions(){
+  const p=PRODUCTS.find(x=>x.id===qv.id);
+  $("qvColors").innerHTML=p.colors.map((c,i)=>`<button onclick="qv.color=${i};renderQVOptions();updateQVPrice()" class="w-9 h-9 rounded-full border-[2.5px] border-ink ${qv.color===i?'ring-4 ring-offset-2 ring-bubble scale-110':''}" style="background:${c}"></button>`).join("");
+  $("qvStor").innerHTML=p.stor.map((s,i)=>`<button onclick="qv.stor=${i};renderQVOptions();updateQVPrice()" class="stor ${qv.stor===i?'active':''} px-4 h-10 rounded-xl border-[2.5px] border-ink bg-white font-extrabold text-[13px]">${s[0]} ${s[1]?`(${s[1]>0?"+":""}${money(s[1])})`:""}</button>`).join("");
+}
+function updateQVPrice(){const p=PRODUCTS.find(x=>x.id===qv.id);const pr=priceOf(qv.id,qv.stor);$("qvOld").textContent=money(p.old+(p.stor[qv.stor]?.[1]||0));$("qvPrice").textContent=money(pr*qv.qty);$("qvQty").textContent=qv.qty;}
+function qvQtyChange(d){qv.qty=Math.max(1,Math.min(5,qv.qty+d));updateQVPrice();}
+function closeQV(){$("qvOverlay").classList.add("hidden");document.body.style.overflow="";}
+$("qvOverlay")?.addEventListener("click",e=>{if(e.target.id==="qvOverlay")closeQV();});
+
+/* ============ CHECKOUT ============ */
+function openCheckout(){
+  if(!Object.keys(cart).length){toast("Your bag is empty — add something first!","#FF2E9A");return;}
+  closeCart();$("coOverlay").classList.remove("hidden");document.body.style.overflow="hidden";coNext(1,true);renderReview();
+}
+function closeCheckout(){$("coOverlay").classList.add("hidden");document.body.style.overflow="";}
+function renderReview(){
+  $("coReview").innerHTML=Object.entries(cart).map(([k,v])=>{const p=PRODUCTS.find(x=>x.id===v.id);return `<div class="flex items-center gap-3 bg-white border-2 border-ink rounded-xl p-2.5"><img src="${p.img}" class="w-12 h-12 rounded-lg object-cover border-2 border-ink"/><div class="flex-1 text-sm font-bold">${p.name} <span class="opacity-50">× ${v.qty}</span></div><div class="font-extrabold text-sm">${money(priceOf(v.id,v.stor)*v.qty)}</div></div>`;}).join("");
+  $("coTotalLbl").textContent=money(cartTotals().total);
+}
+function setFulfil(v){fulfil=v;$("fPickup").classList.toggle("active",v==="pickup");$("fDelivery").classList.toggle("active",v==="delivery");renderCart();renderReview();}
+function setPay(v){payMethod=v;["card","upi","cod"].forEach(m=>$("p"+m[0].toUpperCase()+m.slice(1)).classList.toggle("active",m===v));$("payCardBox").classList.toggle("hidden",v!=="card");$("payUpiBox").classList.toggle("hidden",v!=="upi");$("payCodBox").classList.toggle("hidden",v!=="cod");$("payBtn").textContent=v==="cod"?"PLACE ORDER →":"PAY "+money(cartTotals().total)+" 🔒";}
+function coNext(n,silent){
+  if(n===2&&!silent){
+    if(!$("oName").value.trim()||!$("oPhone").value.trim()){toast("Please add name + phone to continue","#FF2E9A");return;}
+    if(fulfil==="delivery"&&!$("oAddr").value.trim()){toast("Add delivery address please 🏠","#FF2E9A");return;}
+  }
+  [1,2,3].forEach(i=>$("coStep"+i).classList.add("hidden"));
+  $("coStep"+n).classList.remove("hidden");
+  document.querySelectorAll(".coDot").forEach((d,i)=>{d.style.background=i<n?"#121212":"rgba(0,0,0,.08)";});
+  $("coStepsLabel").textContent="Step "+n+" of 3 — "+["","Review & Details","Payment","Done! 🎉"][n];
+  if(n===2){renderReview();setPay(payMethod);}
+}
+function cardPreview(){
+  let num=$("ccNum").value.replace(/\D/g,"").slice(0,16).replace(/(.{4})/g,"$1 ").trim();
+  $("ccNum").value=num;$("cardPrevNum").textContent=num||"•••• •••• •••• ••••";
+  $("cardPrevName").textContent(($("oName").value||"YOUR NAME").toUpperCase());
+  $("cardPrevExp").textContent($("ccExp").value||"MM/YY");
+}
+function placeOrder(){
+  if(payMethod==="card"&&($("ccNum").value.replace(/\D/g,"").length<12)){$("ccNum").value="4242 4242 4242 4242";cardPreview();}
+  const btn=$("payBtn");btn.textContent="PROCESSING... ⏳";btn.disabled=true;
+  setTimeout(()=>{
+    btn.disabled=false;setPay(payMethod);
+    const id="VZ-"+Math.floor(1000+Math.random()*9000);
+    $("ordId").textContent="#"+id;
+    cart={};promo=null;$("promoInp").value="";renderCart();
+    coNext(3,true);
+    // tracking sim
+    const steps=[["Order confirmed","We got it!","done"],["Packing with goodies","Free case + guard","now"],["Out for delivery","Rider assigned",""],["Delivered","Enjoy! 🎉",""]];
+    let s=0;
+    function draw(){
+      $("trackSteps").innerHTML=steps.map((st,i)=>`<div class="flex items-center gap-3"><div class="timeline-dot ${st[2]}">${i<s?"✓":i===s?"●":"○"}</div><div><div class="font-extrabold text-sm">${st[0]}</div><div class="text-xs font-bold opacity-60">${st[1]}</div></div></div>`).join("");
+      $("trackBar").style.width=(12+s*30)+"%";
+    }
+    draw();
+    const iv=setInterval(()=>{s++;if(s>=steps.length){clearInterval(iv);return;}steps[s-1][2]="done";steps[s][2]="now";draw();if(s===2)toast("🛵 Your rider is nearby!");},2600);
+    boom(true);toast("Payment successful! Order "+id,"#B6FF2E");
+  },1400);
+}
+
+/* ============ BOOKING ============ */
+function setBookTab(t){
+  bookTab=t;
+  ["repair","demo","pickup"].forEach(x=>{const b=$("tab-"+x);b.classList.toggle("bg-ink",x===t);b.classList.toggle("text-white",x===t);});
+  $("bookTitle").textContent=t==="repair"?"What needs fixing?":t==="demo"?"What experience?":"Doorstep service?";
+  selSvc=SERVICES[t][0];renderSvc();renderBookingSummary();
+}
+function renderSvc(){
+  $("svcGrid").innerHTML=SERVICES[bookTab].map(s=>`
+    <button onclick='selSvc=${JSON.stringify(s)};renderSvc();renderBookingSummary()' class="svc ${selSvc.n===s.n?'active':''} text-left border-[2.5px] border-ink rounded-2xl p-3 bg-[#FFFBEA] hover:bg-white transition">
+      <i class="fa-solid ${s.i} text-lg ${selSvc.n===s.n?'text-bubble':''}"></i>
+      <div class="font-extrabold text-[13px] mt-1 leading-tight">${s.n}</div>
+      <div class="text-[11px] font-semibold opacity-60 leading-tight">${s.d}</div>
+      <div class="text-[12px] font-extrabold mt-1 ${s.p===0?'text-green-600':'text-tang'}">${s.p===0?'FREE':money(s.p)}</div>
+    </button>`).join("");
+}
+function renderDays(){
+  const row=$("dayRow");const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];const mon=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  let h="";const today=new Date();
+  for(let i=0;i<14;i++){const d=new Date(today);d.setDate(today.getDate()+i);
+    h+=`<button onclick="selDay=${i};renderDays();renderBookingSummary()" class="chip-day ${selDay===i?'active':''} shrink-0 w-[68px] py-2.5 rounded-2xl border-[2.5px] border-ink bg-[#FFFBEA] font-extrabold hover:bg-sunny transition">
+      <div class="text-[10px] tracking-widest opacity-60">${i===0?'TODAY':days[d.getDay()].toUpperCase()}</div>
+      <div class="font-display text-xl leading-none">${d.getDate()}</div>
+      <div class="text-[10px] opacity-60">${mon[d.getMonth()]}</div></button>`;}
+  row.innerHTML=h;
+  if(selDay===null){selDay=0;renderDays();}
+}
+function renderSlots(){
+  const slots=["10:00","10:45","11:30","12:15","1:30","2:15","3:00","3:45","4:30","5:15","6:00","7:15"];
+  const busy=new Set(["11:30","3:00"]);
+  $("slotRow").innerHTML=slots.map(s=>busy.has(s)?`<div class="h-11 rounded-xl border-2 border-dashed border-black/20 text-[12px] font-bold text-black/30 flex items-center justify-center line-through">${s}</div>`:`<button onclick="selSlot='${s}';renderSlots();renderBookingSummary()" class="slot ${selSlot===s?'active':''} h-11 rounded-xl border-[2.5px] border-ink bg-white text-[13px] font-extrabold hover:bg-sunny transition">${s}</button>`).join("");
+}
+function dayLabel(i){const d=new Date();d.setDate(d.getDate()+i);return d.toLocaleDateString("en-US",{weekday:"short",day:"numeric",month:"short"});}
+function renderBookingSummary(){
+  const exp=$("bkExpress").checked?19:0;
+  const total=selSvc.p+exp;
+  $("bookTotal").textContent=total===0?"FREE":money(total);
+  $("bookSummary").innerHTML=`
+    <div class="flex justify-between"><span class="text-white/60">Service</span><span>${selSvc.n}</span></div>
+    <div class="flex justify-between"><span class="text-white/60">Device</span><span>${$("bkBrand").value} ${$("bkModel").value||""}</span></div>
+    <div class="flex justify-between"><span class="text-white/60">Slot</span><span>${selDay!==null?dayLabel(selDay):"—"} • ${selSlot||"—"}</span></div>
+    <div class="flex justify-between"><span class="text-white/60">Base</span><span>${selSvc.p===0?"FREE":money(selSvc.p)}</span></div>
+    <div class="flex justify-between"><span class="text-white/60">Express</span><span>${exp?money(exp):"—"}</span></div>`;
+  $("bookStep").textContent=($("bkName").value?1:0)+($("bkModel").value?1:0)+(selSlot?2:1);
+}
+["bkBrand","bkModel","bkName"].forEach(id=>document.addEventListener("input",e=>{if(e.target.id===id)renderBookingSummary();}));
+function confirmBooking(){
+  const name=$("bkName").value.trim(),phone=$("bkPhone").value.trim();
+  if(!name||!phone){toast("Add your name + phone to book","#FF2E9A");return;}
+  if(!selSlot){toast("Pick a time slot ⏰","#FF2E9A");return;}
+  const id="VM-"+Math.floor(100000+Math.random()*900000);
+  const exp=$("bkExpress").checked;
+  bookings.unshift({id,name,phone,svc:selSvc.n,brand:$("bkBrand").value,model:$("bkModel").value,day:dayLabel(selDay),slot:selSlot,exp,total:selSvc.p+(exp?19:0),status:"Confirmed"});
+  $("bkTicketId").textContent=id;
+  $("bkTicketInfo").innerHTML=`<b>${selSvc.n}</b> • ${$("bkBrand").value} ${$("bkModel").value}<br>${dayLabel(selDay)} at ${selSlot} ${exp?'• 🚀 Express':''}<br><span class="opacity-60">${name} • ${phone}</span>`;
+  $("bkOverlay").classList.remove("hidden");
+  renderMyBookings();boom(true);toast("Booking confirmed! Token "+id,"#00D1FF");
+}
+function renderMyBookings(){
+  $("bkCount").textContent=bookings.length;
+  $("myBookings").innerHTML=bookings.length?bookings.map((b,i)=>`
+    <div class="border-[2.5px] border-ink rounded-2xl p-3 bg-[#FFFBEA]">
+      <div class="flex justify-between items-center"><span class="font-display font-extrabold">${b.id}</span><span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${b.status==='Confirmed'?'bg-limepop border border-ink':'bg-black/10 border border-ink/20'}">${b.status.toUpperCase()}</span></div>
+      <div class="text-[12px] font-bold mt-1">${b.svc} • ${b.day} ${b.slot}</div>
+      <div class="text-[11px] font-semibold opacity-60">${b.brand} ${b.model} • ${b.total===0?"FREE":money(b.total)}</div>
+      ${b.status==='Confirmed'?`<div class="flex gap-1.5 mt-2"><button onclick="cancelBk(${i})" class="text-[11px] font-extrabold bg-white border-2 border-ink rounded-lg px-2.5 py-1">Cancel</button><button onclick="toast('We\\'ll call you to reschedule 📞')" class="text-[11px] font-extrabold bg-ink text-white rounded-lg px-2.5 py-1">Reschedule</button></div>`:""}
+    </div>`).join(""):`<p class="text-sm font-semibold text-black/50">No bookings yet — your tokens will appear here.</p>`;
+}
+function cancelBk(i){bookings[i].status="Cancelled";renderMyBookings();toast("Booking cancelled");}
+function bookTradeEval(){
+  $("bkModel").value="Trade-in: "+$("tiBrand").value;
+  document.getElementById("booking").scrollIntoView({behavior:"smooth"});
+  setBookTab("pickup");selSvc=SERVICES.pickup[3];renderSvc();renderBookingSummary();
+  toast("Trade-in selected! Pick a slot below ♻️","#B6FF2E");
+}
+
+/* ============ TRADE ============ */
+function calcTrade(){
+  const brand=$("tiBrand").value,base=+($("tiPrice").value||0),age=+$("tiAge").value,cond=+$("tiCond").value;
+  const brandF={Apple:1,Samsung:.85,Google:.85,OnePlus:.7,Xiaomi:.6,Other:.5}[brand];
+  const ageF=Math.max(.15,1-age*.13),condF=cond/5;
+  let extra=0;document.querySelectorAll(".tiExtra:checked").forEach(c=>extra+=+c.value);
+  const val=Math.max(15,Math.round(base*brandF*ageF*condF+extra));
+  $("tiValue").textContent=money(val);
+  $("tiAgeV").textContent=age+(age===1?" year":" years");
+  $("tiCondV").textContent=["","Poor","Fair","Okay","Good","Mint"][cond];
+  // animate
+  gsap.fromTo("#tiValue",{scale:.85},{scale:1,duration:.3,ease:"back.out(2)"});
+}
+
+/* ============ MISC ============ */
+function renderRevs(){
+  $("revTrack").innerHTML=REVIEWS.map(r=>`
+    <div class="snap-start shrink-0 w-[300px] sm:w-[360px] card-pop rounded-3xl p-5" style="background:${r.c}">
+      <div class="flex gap-0.5">${stars(r.r)}</div>
+      <p class="font-semibold text-[14px] leading-relaxed mt-2">"${r.s}"</p>
+      <div class="mt-4 flex items-center gap-2.5"><div class="w-10 h-10 rounded-full bg-ink text-white border-2 border-ink flex items-center justify-center font-display font-extrabold">${r.n[0]}</div><div><div class="font-extrabold text-sm">${r.n}</div><div class="text-[11px] font-bold opacity-60">${r.t} • ✓ Verified</div></div></div>
+    </div>`).join("");
+}
+function scrollRevs(d){$("revTrack").scrollBy({left:d*380,behavior:"smooth"});}
+function subscribe(){const e=$("nlEmail").value;if(!e.includes("@")){toast("Enter a valid email 📧","#FF2E9A");return;}$("nlEmail").value="";boom(true);toast("Welcome! $15 code sent: HELLO15 🎁","#7C3AED");}
+function sendContact(){if(!$("cName").value||!$("cMsg").value){toast("Add your name + message","#FF2E9A");return;}toast("Message sent! We reply in ~15 mins 💬","#00D1FF");$("cName").value="";$("cMsg").value="";boom();}
+function copyTick(){}
+
+/* countdown */
+let cdEnd=Date.now()+5*3600*1000+23*60*1000+11000;
+setInterval(()=>{
+  let d=Math.max(0,cdEnd-Date.now());
+  const h=String(Math.floor(d/3600000)).padStart(2,"0"),m=String(Math.floor(d%3600000/60000)).padStart(2,"0"),s=String(Math.floor(d%60000/1000)).padStart(2,"0");
+  $("cdH").textContent=h;$("cdM").textContent=m;$("cdS").textContent=s;
+  const hm=$("heroMiniTimer");if(hm)hm.textContent=`Ends in ${h}:${m}:${s}`;
+},1000);
+
+/* counters + scroll anims */
+function initAnims(){
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll(".counter").forEach(el=>{
+    const to=+el.dataset.to;
+    ScrollTrigger.create({trigger:el,start:"top 90%",once:true,onEnter:()=>{
+      gsap.fromTo(el,{innerText:0},{innerText:to,duration:1.6,snap:{innerText:1},onUpdate:function(){el.textContent=Math.floor(+el.textContent).toLocaleString();}});
+    }});
+  });
+  gsap.utils.toArray("#productGrid > div, .card-pop").forEach(el=>{
+    gsap.from(el,{y:26,opacity:0,duration:.6,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 94%",once:true}});
+  });
+}
+window.addEventListener("scroll",()=>{$("topBtn").classList.toggle("hidden",window.scrollY<600);});
+setInterval(()=>{if(!$("revTrack"))return;const t=$("revTrack");if(t.scrollLeft+t.clientWidth>=t.scrollWidth-10)t.scrollTo({left:0,behavior:"smooth"});else t.scrollBy({left:380,behavior:"smooth"});},4500);
+
+/* init */
+renderCats();renderProducts();renderFlash();renderRevs();renderCart();renderWish();
+setBookTab("repair");renderDays();renderSlots();renderBookingSummary();renderMyBookings();calcTrade();
+initAnims();
+setTimeout(()=>toast("⚡ Welcome! Use VOLT20 for 20% off today","#FFC700"),900);
+</script>
+</body>
+</html>
